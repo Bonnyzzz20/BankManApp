@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +10,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  private authService = inject(AuthService);
+  currentUser = this.authService.currentUser;
+
   // Dati finti (mock) per simulare i conti dell'utente
   // In un'app reale questi arriverebbero da un servizio/API
   accounts = [

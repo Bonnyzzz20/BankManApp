@@ -2,7 +2,7 @@
   
   <!-- Hero Section -->
   <header class="hero-section">
-    <h1>Bentornato, <span class="highlight">Biagio</span></h1>
+    <h1>Bentornato, <span class="highlight">{{ currentUser()?.name || 'Utente' }}</span></h1>
     <p class="subtitle">Ecco una panoramica della tua situazione finanziaria oggi.</p>
   </header>
 

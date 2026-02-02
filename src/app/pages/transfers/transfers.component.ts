@@ -2,24 +2,32 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../shared/button/button.component';
 
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-transfers',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
-  template: `
-    <div class="page-container">
-      <h1>Effettua un Bonifico</h1>
-      <p>Trasferisci denaro in modo semplice e veloce.</p>
-      <div class="transfer-form">
-        <p>Modulo bonifico in costruzione...</p>
-        <app-button label="Esegui Bonifico Demo" variant="primary"></app-button>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .page-container { padding: 2rem; max-width: 1200px; margin: 0 auto; }
-    h1 { color: var(--primary-color); margin-bottom: 1rem; }
-    .transfer-form { background: white; padding: 2rem; border-radius: 8px; box-shadow: var(--shadow-sm); }
-  `]
+  imports: [CommonModule, ButtonComponent, FormsModule],
+  templateUrl: './transfers.component.html',
+  styleUrl: './transfers.component.css'
 })
-export class TransfersComponent {}
+export class TransfersComponent {
+  transferData = {
+    beneficiary: '',
+    iban: '',
+    amount: null,
+    reason: ''
+  };
+
+  recentTransfers = [
+    { id: 1, beneficiary: 'Mario Rossi', date: '2023-11-01', amount: 150.00, status: 'completed' },
+    { id: 2, beneficiary: 'Enel Energia', date: '2023-10-28', amount: 84.50, status: 'completed' },
+    { id: 3, beneficiary: 'Condominio', date: '2023-10-15', amount: 200.00, status: 'pending' },
+    { id: 4, beneficiary: 'Luigi Verdi', date: '2023-10-10', amount: 50.00, status: 'completed' }
+  ];
+
+  onsubmit() {
+    console.log('Bonifico inviato:', this.transferData);
+    alert('Funzionalità demo: Dati bonifico stampati in console!');
+  }
+}

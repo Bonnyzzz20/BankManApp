@@ -1,26 +1,51 @@
 <div class="auth-container">
-    <div class="auth-card">
-        <h2>Registrati</h2>
-        <p>Entra nel mondo relax.</p>
-        
-        <div class="form-group">
-            <label for="name">Nome Completo</label>
-            <input type="text" id="name" #nameInput placeholder="Il tuo nome">
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" #emailInput placeholder="tuo@email.com">
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" #passwordInput placeholder="********">
-        </div>
-
-        <div class="form-actions">
-            <!-- Passiamo i valori direttamente dagli input usando le template variable -->
-            <app-button label="Crea Account" (onClick)="handleRegister(nameInput.value, emailInput.value, passwordInput.value)"></app-button>
-        </div>
+  <div class="auth-card glass-panel">
+    <div class="auth-header">
+      <div class="icon-wrapper">
+        <span class="lock-icon">👋</span>
+      </div>
+      <h1>Crea Account</h1>
+      <p>Unisciti a HomeBank oggi stesso</p>
     </div>
+
+    <form (ngSubmit)="handleRegister()" #registerForm="ngForm">
+      <div class="form-group">
+        <label for="name">Nome Completo</label>
+        <div class="input-wrapper">
+          <input type="text" id="name" name="name" 
+                 [(ngModel)]="registerData.name" 
+                 placeholder="Tuon Nome" required>
+          <span class="input-icon">👤</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="email" name="email" 
+                 [(ngModel)]="registerData.email" 
+                 placeholder="nome@esempio.com" required>
+          <span class="input-icon">✉️</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" name="password" 
+                 [(ngModel)]="registerData.password" 
+                 placeholder="Scegli una password forte" required>
+          <span class="input-icon">🔑</span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <app-button label="Registrati" variant="primary" type="submit" [fullWidth]="true"></app-button>
+      </div>
+
+      <div class="auth-footer">
+        <p>Hai già un account? <a routerLink="/login">Accedi</a></p>
+      </div>
+    </form>
+  </div>
 </div>

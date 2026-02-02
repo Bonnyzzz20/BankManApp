@@ -7,12 +7,13 @@ import { ButtonComponent } from '../../shared/button/button.component';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, ButtonComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  authService = inject(AuthService); // Inject del servizio auth
+  authService = inject(AuthService);
+  isMenuOpen = false;
 
   navLinks = [
     { path: '/', label: 'Home' },
@@ -21,7 +22,16 @@ export class NavbarComponent {
     { path: '/transfers', label: 'Bonifici' }
   ];
 
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  closeMenu() {
+    this.isMenuOpen = false;
+  }
+
   handleLogout() {
     this.authService.logout();
+    this.closeMenu();
   }
 }

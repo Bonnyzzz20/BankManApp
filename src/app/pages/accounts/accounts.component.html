@@ -1,0 +1,44 @@
+<div class="container page-container">
+  <header class="page-header">
+    <h1>I tuoi Conti</h1>
+    <p>Gestisci e monitora i tuoi saldi e movimenti in tempo reale.</p>
+  </header>
+
+  <div class="accounts-grid">
+    @for (account of accounts; track account.id) {
+      <div class="account-card glass-panel">
+        <div class="card-header">
+          <div class="account-type-icon" [ngClass]="account.type">
+            @if (account.type === 'checking') { 🏦 }
+            @else if (account.type === 'savings') { 🐷 }
+            @else { 📈 }
+          </div>
+          <div class="account-meta">
+            <h3>{{ account.name }}</h3>
+            <span class="account-badge">{{ account.type | titlecase }}</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="balance-group">
+            <span class="label">Saldo Disponibile</span>
+            <span class="amount">{{ account.balance | currency:'EUR' }}</span>
+          </div>
+          
+          <div class="iban-group">
+            <span class="label">IBAN</span>
+            <code class="iban">{{ account.iban }}</code>
+            <button class="btn-copy" title="Copia IBAN">📋</button>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="stats">
+            <span>{{ account.movements }} movimenti questo mese</span>
+          </div>
+          <button class="btn btn-outline">Dettagli</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

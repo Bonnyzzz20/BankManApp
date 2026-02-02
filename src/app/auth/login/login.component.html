@@ -1,20 +1,41 @@
 <div class="auth-container">
-    <div class="auth-card">
-        <h2>Bentornato</h2>
-        <p>Accedi al tuo conto.</p>
-        
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" #emailInput placeholder="tuo@email.com">
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" #passwordInput placeholder="********">
-        </div>
-
-        <div class="form-actions">
-            <app-button label="Accedi" (onClick)="handleLogin(emailInput.value, passwordInput.value)"></app-button>
-        </div>
+  <div class="auth-card glass-panel">
+    <div class="auth-header">
+      <div class="icon-wrapper">
+        <span class="lock-icon">🔒</span>
+      </div>
+      <h1>Bentornato</h1>
+      <p>Accedi per gestire le tue finanze</p>
     </div>
+
+    <form (ngSubmit)="handleLogin()" #loginForm="ngForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <input type="email" id="email" name="email" 
+                 [(ngModel)]="loginData.email" 
+                 placeholder="nome@esempio.com" required>
+          <span class="input-icon">✉️</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" name="password" 
+                 [(ngModel)]="loginData.password" 
+                 placeholder="••••••••" required>
+          <span class="input-icon">🔑</span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <app-button label="Accedi" variant="primary" type="submit" [fullWidth]="true"></app-button>
+      </div>
+
+      <div class="auth-footer">
+        <p>Non hai un account? <a routerLink="/register">Registrati</a></p>
+      </div>
+    </form>
+  </div>
 </div>

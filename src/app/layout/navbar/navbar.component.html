@@ -1,34 +1,44 @@
-<nav class="navbar">
-  <div class="container">
-    <a routerLink="/" class="brand">Home Banking</a>
+<nav class="navbar glass-panel">
+  <div class="container navbar-content">
     
-    <!-- Mostra i link solo se l'utente è loggato -->
-    <ul class="nav-links">
-      @if (authService.isAuthenticated()) {
-        @for (link of navLinks; track link.label) {
-          <li>
-            <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-              {{ link.label }}
-            </a>
-          </li>
-        }
-      }
-    </ul>
+    <!-- Logo -->
+    <a routerLink="/" class="logo">
+      <span class="logo-icon">🏦</span>
+      <span class="logo-text">Home<span class="accent">Bank</span></span>
+    </a>
 
-    <div class="user-menu">
-      @if (authService.isAuthenticated()) {
-        <!-- Utente Loggato -->
-        <div class="user-actions">
-           <span>Benvenuto, {{ authService.currentUser()?.name }}</span>
-           <app-button label="Esci" variant="outline" (onClick)="handleLogout()"></app-button>
-        </div>
-      } @else {
-        <!-- Utente Ospite -->
-        <div class="guest-actions">
-           <a routerLink="/login" class="login-link">Accedi</a>
-           <app-button label="Registrati" routerLink="/register"></app-button>
-        </div>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-toggle" (click)="toggleMenu()" aria-label="Toggle navigation">
+      <span class="bar" [class.open]="isMenuOpen"></span>
+      <span class="bar" [class.open]="isMenuOpen"></span>
+      <span class="bar" [class.open]="isMenuOpen"></span>
+    </button>
+
+    <!-- Navigation Links -->
+    <ul class="nav-links" [class.active]="isMenuOpen">
+      @for (link of navLinks; track link.path) {
+        <li>
+          <a [routerLink]="link.path" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{exact: true}"
+             (click)="closeMenu()">
+            {{ link.label }}
+          </a>
+        </li>
       }
-    </div>
+      
+      <!-- Auth Buttons -->
+       @if (authService.isAuthenticated()) {
+         <li class="auth-action">
+            <button class="btn-logout" (click)="handleLogout()">
+              Logout
+            </button>
+         </li>
+       } @else {
+         <li class="auth-action">
+            <a routerLink="/login" class="btn-login" (click)="closeMenu()">Accedi</a>
+         </li>
+       }
+    </ul>
   </div>
 </nav>

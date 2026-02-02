@@ -14,6 +14,7 @@ export class ButtonComponent {
   @Input() type: 'button' | 'submit' | 'reset' = 'button'; // Tipo di bottone HTML
   @Input() variant: 'primary' | 'secondary' | 'outline' = 'primary'; // Stile visivo: primario (verde), secondario (lime), outline (solo bordo)
   @Input() disabled: boolean = false; // Se è vero, il bottone è disabilitato
+  @Input() fullWidth: boolean = false; // Se vero, il bottone occupa il 100% della larghezza
   
   // Output: Eventi che questo componente può inviare al padre
   @Output() onClick = new EventEmitter<Event>(); // Emette un evento quando viene cliccato

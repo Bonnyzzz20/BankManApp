@@ -1,0 +1,70 @@
+<div class="container page-container">
+  <header class="page-header">
+    <h1>Le tue Carte</h1>
+    <p>Gestisci limiti, PIN e blocca le tue carte con un click.</p>
+  </header>
+
+  <div class="cards-grid">
+    @for (card of cards; track card.id) {
+      <div class="card-wrapper">
+        <!-- Visual Card -->
+        <div class="credit-card" [ngClass]="card.variant">
+          <div class="card-bg"></div>
+          <div class="card-glow"></div>
+          
+          <div class="card-content">
+            <div class="card-top">
+              <span class="chip"></span>
+              <span class="contactless">))))</span>
+            </div>
+            
+            <div class="card-number">
+              {{ card.number }}
+            </div>
+            
+            <div class="card-bottom">
+              <div class="card-holder">
+                <span class="label">Titolare</span>
+                <span class="value">{{ card.holder }}</span>
+              </div>
+              <div class="card-expiry">
+                <span class="label">Scadenza</span>
+                <span class="value">{{ card.expiry }}</span>
+              </div>
+              <div class="card-logo">
+                @if (card.type === 'visa') { 
+                  <span class="visa-logo">VISA</span>
+                } @else {
+                  <span class="mc-logo">MasterCard</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Actions -->
+        <div class="card-actions glass-panel">
+          <div class="balance-info">
+            <span class="label">Saldo</span>
+            <span class="value" [class.negative]="card.balance < 0">
+              {{ card.balance | currency:'EUR' }}
+            </span>
+          </div>
+          <div class="action-buttons">
+            <button class="btn-action" title="Blocca Carta">🔒</button>
+            <button class="btn-action" title="Impostazioni">⚙️</button>
+            <button class="btn-action" title="Lista Movimenti">📄</button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Add New Card Placeholder -->
+    <div class="card-wrapper add-new">
+      <div class="add-card-btn">
+        <span class="plus">+</span>
+        <span>Richiedi Nuova Carta</span>
+      </div>
+    </div>
+  </div>
+</div>

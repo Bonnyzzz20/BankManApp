@@ -1,38 +1,89 @@
 <div class="home-container">
-  <section class="hero">
-    <h1>Benvenuto, <span class="highlight">Biagio</span></h1>
-    <p>Il tuo relax finanziario inizia qui.</p>
+  
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <h1>Bentornato, <span class="highlight">Biagio</span></h1>
+    <p class="subtitle">Ecco una panoramica della tua situazione finanziaria oggi.</p>
+  </header>
+
+  <!-- Quick Actions -->
+  <section class="quick-actions">
+    <button class="action-card" (click)="handleQuickAction('transfer')">
+      <span class="icon">💸</span>
+      <span>Nuovo Bonifico</span>
+    </button>
+    <button class="action-card" (click)="handleQuickAction('topup')">
+      <span class="icon">📱</span>
+      <span>Ricarica</span>
+    </button>
+    <button class="action-card" (click)="handleQuickAction('bills')">
+      <span class="icon">🧾</span>
+      <span>Bollettini</span>
+    </button>
+    <button class="action-card" (click)="handleQuickAction('cards')">
+      <span class="icon">💳</span>
+      <span>Gestione Carte</span>
+    </button>
   </section>
 
-  <section class="dashboard">
-    <div class="accounts-grid">
-      @for (account of accounts; track account.id) {
-        <div class="card account-card">
-          <div class="card-header">
-            <h3>{{ account.name }}</h3>
-            <span class="icon">🏦</span>
-          </div>
-          <p class="iban">{{ account.iban }}</p>
-          <div class="balance">
-            <span class="label">Saldo disponibile</span>
-            <span class="amount" [class.negative]="account.balance < 0">
-              € {{ account.balance | number:'1.2-2' }}
-            </span>
-          </div>
-          <div class="actions">
-            <app-button label="Dettagli" variant="outline"></app-button>
-          </div>
-        </div>
-      }
-    </div>
-
-    <aside class="quick-actions">
-      <h3>Operazioni Veloci</h3>
-      <div class="action-buttons">
-        <app-button label="Nuovo Bonifico" (onClick)="handleQuickAction('bonifico')"></app-button>
-        <app-button label="Ricarica Telefonica" variant="secondary" (onClick)="handleQuickAction('ricarica')"></app-button>
-        <app-button label="Pagamento Bollettino" variant="outline" (onClick)="handleQuickAction('bollettino')"></app-button>
+  <!-- Main Grid -->
+  <div class="dashboard-grid">
+    
+    <!-- Accounts Section -->
+    <section class="accounts-section glass-panel">
+      <div class="section-header">
+        <h2>I tuoi Conti</h2>
+        <a routerLink="/accounts" class="view-all">Vedi tutti &rarr;</a>
       </div>
-    </aside>
-  </section>
+
+      <div class="accounts-list">
+        @for (account of accounts; track account.id) {
+          <div class="account-item">
+            <div class="account-icon" [class.savings]="account.type === 'savings'" [class.credit]="account.type === 'credit'">
+              @if (account.type === 'savings') { 🐷 } 
+              @else if (account.type === 'credit') { 💳 }
+              @else { 🏦 }
+            </div>
+            <div class="account-details">
+              <h3>{{ account.name }}</h3>
+              <p class="iban">{{ account.iban }}</p>
+            </div>
+            <div class="account-balance" [class.negative]="account.balance < 0">
+              {{ account.balance | currency:'EUR' }}
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <p>Nessun conto attivo.</p>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Recent Transactions Section -->
+    <section class="transactions-section glass-panel">
+      <div class="section-header">
+        <h2>Transazioni Recenti</h2>
+        <button class="view-all">Vedi Storico &rarr;</button>
+      </div>
+
+      <div class="transactions-list">
+        @for (tx of transactions; track tx.id) {
+          <div class="transaction-item">
+            <div class="tx-icon">
+              @if (tx.type === 'income') { ⬇️ } @else { ⬆️ }
+            </div>
+            <div class="tx-info">
+              <h4>{{ tx.description }}</h4>
+              <p class="date">{{ tx.date }}</p>
+            </div>
+            <div class="tx-amount" [class.income]="tx.type === 'income'" [class.expense]="tx.type === 'expense'">
+              {{ tx.type === 'income' ? '+' : '' }} {{ tx.amount | currency:'EUR' }}
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+  </div>
 </div>

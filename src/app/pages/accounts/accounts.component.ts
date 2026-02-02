@@ -5,20 +5,34 @@ import { CommonModule } from '@angular/common';
   selector: 'app-accounts',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="page-container">
-      <h1>I tuoi Conti</h1>
-      <p>Gestisci i tuoi risparmi in sicurezza.</p>
-      <!-- Qui andrà la lista dettagliata -->
-      <div class="placeholder-content">
-        <p>Funzionalità in arrivo...</p>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .page-container { padding: 2rem; max-width: 1200px; margin: 0 auto; }
-    h1 { color: var(--primary-color); margin-bottom: 1rem; }
-    .placeholder-content { padding: 2rem; background: #fff; border-radius: 8px; text-align: center; color: #888; }
-  `]
+  templateUrl: './accounts.component.html',
+  styleUrl: './accounts.component.css'
 })
-export class AccountsComponent {}
+export class AccountsComponent {
+  accounts = [
+    { 
+      id: 1, 
+      name: 'Conto Corrente Premium', 
+      iban: 'IT89 A123 4567 8901', 
+      balance: 12543.50,
+      type: 'checking',
+      movements: 12
+    },
+    { 
+      id: 2, 
+      name: 'Conto Risparmio', 
+      iban: 'IT89 A246 8135 7902', 
+      balance: 50000.00,
+      type: 'savings',
+      movements: 2
+    },
+    { 
+      id: 3, 
+      name: 'Conto Investimenti', 
+      iban: 'IT12 B987 6543 2109', 
+      balance: 15400.20,
+      type: 'investment',
+      movements: 5
+    }
+  ];
+}

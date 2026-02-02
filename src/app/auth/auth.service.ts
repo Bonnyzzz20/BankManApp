@@ -30,6 +30,7 @@ export class AuthService {
   }
 
   login(email: string, password?: string) {
+    //serve per salvare in local storage
     if (isPlatformBrowser(this.platformId)) {
       const storedUser = localStorage.getItem('user_data');
       if (storedUser) {

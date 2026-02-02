@@ -3,19 +3,28 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 import { ButtonComponent } from '../../shared/button/button.component';
 
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, FormsModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
+  registerData = {
+    name: '',
+    email: '',
+    password: ''
+  };
+
   constructor(private authService: AuthService) {}
 
-  handleRegister(name: string, email: string, password?: string) {
-    if (name && email && password) {
-      this.authService.register(name, email, password);
+  handleRegister() {
+    if (this.registerData.name && this.registerData.email && this.registerData.password) {
+      this.authService.register(this.registerData.name, this.registerData.email, this.registerData.password);
     } else {
         alert('Compila tutti i campi, inclusa la password!');
     }

@@ -1,0 +1,38 @@
+<div class="home-container">
+  <section class="hero">
+    <h1>Benvenuto, <span class="highlight">Biagio</span></h1>
+    <p>Il tuo relax finanziario inizia qui.</p>
+  </section>
+
+  <section class="dashboard">
+    <div class="accounts-grid">
+      @for (account of accounts; track account.id) {
+        <div class="card account-card">
+          <div class="card-header">
+            <h3>{{ account.name }}</h3>
+            <span class="icon">🏦</span>
+          </div>
+          <p class="iban">{{ account.iban }}</p>
+          <div class="balance">
+            <span class="label">Saldo disponibile</span>
+            <span class="amount" [class.negative]="account.balance < 0">
+              € {{ account.balance | number:'1.2-2' }}
+            </span>
+          </div>
+          <div class="actions">
+            <app-button label="Dettagli" variant="outline"></app-button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <aside class="quick-actions">
+      <h3>Operazioni Veloci</h3>
+      <div class="action-buttons">
+        <app-button label="Nuovo Bonifico" (onClick)="handleQuickAction('bonifico')"></app-button>
+        <app-button label="Ricarica Telefonica" variant="secondary" (onClick)="handleQuickAction('ricarica')"></app-button>
+        <app-button label="Pagamento Bollettino" variant="outline" (onClick)="handleQuickAction('bollettino')"></app-button>
+      </div>
+    </aside>
+  </section>
+</div>

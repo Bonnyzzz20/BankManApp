@@ -1,0 +1,26 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Registrati</h2>
+        <p>Entra nel mondo relax.</p>
+        
+        <div class="form-group">
+            <label for="name">Nome Completo</label>
+            <input type="text" id="name" #nameInput placeholder="Il tuo nome">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" #emailInput placeholder="tuo@email.com">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" #passwordInput placeholder="********">
+        </div>
+
+        <div class="form-actions">
+            <!-- Passiamo i valori direttamente dagli input usando le template variable -->
+            <app-button label="Crea Account" (onClick)="handleRegister(nameInput.value, emailInput.value, passwordInput.value)"></app-button>
+        </div>
+    </div>
+</div>

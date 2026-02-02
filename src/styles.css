@@ -1,0 +1,35 @@
+/* RelaxBanking Inspired Theme */
+:root {
+  --primary-color: #006837; /* Dark Green */
+  --primary-light: #00965e; /* Lighter Green */
+  --secondary-color: #8bc34a; /* Lime Green Accent */
+  --text-color: #333333;
+  --text-light: #ffffff;
+  --bg-color: #f4f7f6;
+  --bg-card: #ffffff;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}

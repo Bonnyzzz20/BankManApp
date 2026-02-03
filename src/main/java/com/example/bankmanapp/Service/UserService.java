@@ -22,9 +22,9 @@ public class UserService {
     }
 
 
-     //Trova un utente per ID.
-     // Metodo robusto: valida l'input, previene SQL Injection tramite JPA
-     // e gestisce l'assenza del dato con un'eccezione esplicita.
+    //Trova un utente per ID.
+    // Metodo robusto: valida l'input, previene SQL Injection tramite JPA
+    // e gestisce l'assenza del dato con un'eccezione esplicita.
 
     public UserDto trovaPerId(Long id) {
 

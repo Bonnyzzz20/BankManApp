@@ -31,7 +31,6 @@ public class User {
 
 
 
-
     public User() {}
 
     public User(Long id, String nome,String cognome, String email, String password, String codiceFiscale) {

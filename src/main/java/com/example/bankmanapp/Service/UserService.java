@@ -32,6 +32,7 @@ public class UserService {
             throw new IllegalArgumentException("ID non valido: deve essere un valore numerico positivo.");
         }
 
+
         // Utilizzo di Optional per una gestione sicura
         return userRepository.findById(id)
                 .map(this::convertToDto)
@@ -51,6 +52,7 @@ public class UserService {
                 user.getId(),
                 user.getNome(),
                 user.getCognome(),
+                user.getCodiceFiscale(),
                 user.getEmail()
         );
     }

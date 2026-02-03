@@ -18,6 +18,9 @@ public class User {
     @Column(name= "cognome", nullable = false)
     private String cognome;
 
+    @Column (name = "codiceFiscale", nullable = false, unique = true)
+    private String codiceFiscale;
+
     @Column(name= "email", nullable = false, unique = true) //aggiorna sulla repos
     private String email;
 
@@ -29,18 +32,16 @@ public class User {
 
 
 
-
     public User() {}
 
-    public User(Long id, String nome,String cognome, String email, String password) {
+    public User(Long id, String nome,String cognome, String email, String password, String codiceFiscale) {
         this.id = id;
         this.nome = nome;
         this.cognome=cognome;
+        this.codiceFiscale=codiceFiscale;
         this.email = email;
         this.password = password;
     }
-
-
 
 
     public Long getId() {
@@ -79,7 +80,6 @@ public class User {
     }
 
 
-
     public String getEmail() {
         return email;
     }
@@ -87,5 +87,16 @@ public class User {
     public void setEmail(String email) {
         if (!email.contains("@")) throw new IllegalArgumentException("Email non valida");
         this.email = email;
+    }
+
+
+    public String getCodiceFiscale() {
+        return codiceFiscale;
+    }
+
+    public void setCodiceFiscale(String codiceFiscale){
+        if (codiceFiscale.length() != 16 || !codiceFiscale.matches("[A-Za-z0-9]+"))
+        { System.out.println("Codice fiscale non valido"); }
+        else { System.out.println("Codice fiscale valido"); }
     }
 }

@@ -34,11 +34,21 @@ public class UserService {
 
 
         // Utilizzo di Optional per una gestione sicura
+        // in caso un dato potrebbe non esistere
+        //Mentre findAll() restituisce sempre una lista (che al massimo è vuota),
+        // i metodi che cercano un singolo elemento (come findById) in Spring Data JPA restituiscono
+        // un Optional<User>.
+
         return userRepository.findById(id)
                 .map(this::convertToDto)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + id));
+
+
     }
 
+     //.stream() trasforma la lista in un flusso ordinato di dati
+     //.map(this::convertToDto) per ogni record viene applicata la trasformaione
+     //.collect(Collectors.toList()) prende tutti i record DTO r li inserisce in una lista finale
 
     public List<UserDto> findAll() {
         return userRepository.findAll().stream()
@@ -46,14 +56,17 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+
+
     // Conversione Model  DTO
     private UserDto convertToDto(User user) {
         return new UserDto(
                 user.getId(),
                 user.getNome(),
                 user.getCognome(),
-                user.getCodiceFiscale(),
-                user.getEmail()
+
+                user.getEmail(),
+                user.getCodiceFiscale()
         );
     }
 }

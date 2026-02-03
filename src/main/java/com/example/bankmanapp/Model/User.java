@@ -18,7 +18,7 @@ public class User {
     @Column(name= "cognome", nullable = false)
     private String cognome;
 
-    @Column (name = "codiceFiscale", nullable = false, unique = true)
+    @Column (name = "codice_fiscale", nullable = false, unique = true)
     private String codiceFiscale;
 
     @Column(name= "email", nullable = false, unique = true) //aggiorna sulla repos
@@ -37,9 +37,9 @@ public class User {
         this.id = id;
         this.nome = nome;
         this.cognome=cognome;
-        this.codiceFiscale=codiceFiscale;
         this.email = email;
         this.password = password;
+        this.codiceFiscale=codiceFiscale;
     }
 
 
@@ -94,8 +94,11 @@ public class User {
     }
 
     public void setCodiceFiscale(String codiceFiscale){
-        if (codiceFiscale.length() != 16 || !codiceFiscale.matches("[A-Za-z0-9]+"))
-        { System.out.println("Codice fiscale non valido"); }
-        else { System.out.println("Codice fiscale valido"); }
+        if (codiceFiscale.length() != 16 || !codiceFiscale.matches("[A-Za-z0-9]+")) {
+            System.out.println("Codice fiscale non valido");
+        } else {
+            System.out.println("Codice fiscale valido");
+            this.codiceFiscale = codiceFiscale;
+        }
     }
 }

@@ -2,12 +2,11 @@ package com.example.bankmanapp.Controller;
 
 
 import com.example.bankmanapp.Dto.UserDto;
-import com.example.bankmanapp.Model.User;
 import com.example.bankmanapp.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/User")
@@ -15,14 +14,18 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    //metodo che trova un solo utente tramite id
     @GetMapping(value = "/{id}")
     public UserDto getUser(@PathVariable Long id) {
         UserDto user = userService.trovaPerId(id);
-        //System.out.println("user:"+ user.nome());
         return user;
     }
 
-
+    //metodo che restituisce tutti i record in db
+    @GetMapping(value= "/Users")
+    public List<UserDto>  getAllUsers(){
+     return userService.findAll();
+    }
 
 
 }

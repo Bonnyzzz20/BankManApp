@@ -15,7 +15,10 @@ public class User {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name= "email", nullable = false, unique = true)
+    @Column(name= "cognome", nullable = false)
+    private String cognome;
+
+    @Column(name= "email", nullable = false, unique = true) //aggiorna sulla repos
     private String email;
 
     @Column(name="password", nullable = false)
@@ -24,11 +27,15 @@ public class User {
 
 
 
+
+
+
     public User() {}
 
-    public User(Long id, String nome, String email, String password) {
+    public User(Long id, String nome,String cognome, String email, String password) {
         this.id = id;
         this.nome = nome;
+        this.cognome=cognome;
         this.email = email;
         this.password = password;
     }
@@ -59,6 +66,19 @@ public class User {
         if (nome == null || nome.trim().isEmpty()) throw new IllegalArgumentException("Nome non valido");
         this.nome = nome;
     }
+
+    public String getCognome(){
+        return cognome;
+
+    }
+
+    public void setCognome(String cognome){
+        if (cognome == null || cognome.trim().isEmpty()) throw new IllegalArgumentException("Cognome non valido");
+        this.cognome = cognome;
+
+    }
+
+
 
     public String getEmail() {
         return email;

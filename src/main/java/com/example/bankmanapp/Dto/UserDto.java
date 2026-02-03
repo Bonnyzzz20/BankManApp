@@ -11,6 +11,10 @@ public record UserDto(
         String nome,
 
 
+        @NotBlank( message= "Il cognome non può essere vuoto")
+        String cognome,
+
+
 
         @Email(message = "Formato email non valido")
         @NotBlank(message = "L'email è obbligatoria")

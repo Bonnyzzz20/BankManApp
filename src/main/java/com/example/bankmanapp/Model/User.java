@@ -1,0 +1,71 @@
+package com.example.bankmanapp.Model;
+
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name="users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "nome", nullable = false)
+    private String nome;
+
+    @Column(name= "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name="password", nullable = false)
+    private String password;
+
+
+
+
+    public User() {}
+
+    public User(Long id, String nome, String email, String password) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.password = password;
+    }
+
+
+
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) throw new IllegalArgumentException("Nome non valido");
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        if (!email.contains("@")) throw new IllegalArgumentException("Email non valida");
+        this.email = email;
+    }
+}

@@ -24,8 +24,8 @@ public class MovimentiService {
     }
 
 
-    public MovimentiDto trovaPerId(Long id) {
-        if (id == null || id <= 0) {
+    public MovimentiDto trovaPerId(int id) {
+        if ( id <= 0) {
             throw new IllegalArgumentException("ID non valido: deve essere un valore numerico positivo.");
         }
         return movimentoRepository.findById(id)

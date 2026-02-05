@@ -4,7 +4,7 @@ import com.example.bankmanapp.Model.Movimenti;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-public interface MovimentoRepository extends JpaRepository<Movimenti, Long> {
+public interface MovimentoRepository extends JpaRepository<Movimenti, Integer> {
    // List<Movimenti> findByIdConto(Long idConto);
 
 }

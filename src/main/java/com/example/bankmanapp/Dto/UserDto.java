@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 
 
 public record UserDto(
-        Long id,
+        int id,
 
 
         @NotBlank(message = "Il nome non può essere vuoto")

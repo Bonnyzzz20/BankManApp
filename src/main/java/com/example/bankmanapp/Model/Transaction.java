@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Transaction {
-    private Long idConto;
+    private int idConto;
     private BigDecimal saldoAlMomento;
     private List<Movimenti> movimenti;
     private LocalDateTime dataReport;
 
-    public Transaction(Long idConto, BigDecimal saldoAlMomento, List<Movimenti> movimenti) {
+    public Transaction(int idConto, BigDecimal saldoAlMomento, List<Movimenti> movimenti) {
         this.idConto = idConto;
         this.saldoAlMomento = saldoAlMomento;
         this.movimenti = movimenti;
@@ -18,7 +18,7 @@ public class Transaction {
     }
 
     // Solo Getter
-    public Long getIdConto() { return idConto; }
+    public int getIdConto() { return idConto; }
     public BigDecimal getSaldoAlMomento() { return saldoAlMomento; }
     public List<Movimenti> getMovimenti() { return movimenti; }
     public LocalDateTime getDataReport() { return dataReport; }

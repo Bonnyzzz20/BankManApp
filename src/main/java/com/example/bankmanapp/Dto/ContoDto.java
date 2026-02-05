@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 public record ContoDto(
 
-        Long id,
-        Long idUtente,
+        int id,
+        int idUtente,
         String iban,
         BigDecimal saldo
 

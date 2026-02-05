@@ -10,7 +10,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -33,7 +33,7 @@ public class User {
 
     public User() {}
 
-    public User(Long id, String nome,String cognome, String email, String password, String codiceFiscale) {
+    public User(int id, String nome,String cognome, String email, String password, String codiceFiscale) {
         this.id = id;
         this.nome = nome;
         this.cognome=cognome;
@@ -43,10 +43,10 @@ public class User {
     }
 
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -13,10 +13,10 @@ public class Movimenti {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "id_conto", nullable = false)
-    private Long idConto;// FK verso Conto
+    private int idConto;// FK verso Conto
 
     @Column(name = "importo", nullable = false, precision = 19, scale = 2)
     private BigDecimal importo;
@@ -29,7 +29,7 @@ public class Movimenti {
 
     public Movimenti() {}
 
-    public Movimenti(Long idConto, BigDecimal importo, String tipo) {
+    public Movimenti(int idConto, BigDecimal importo, String tipo) {
         setIdConto(idConto);
         setImporto(importo);
         setTipo(tipo);
@@ -38,17 +38,17 @@ public class Movimenti {
 
     // Getter
 
-    public Long getId() {return id;}
-    public Long getIdConto() { return idConto; }
+    public int getId() {return id;}
+    public int getIdConto() { return idConto; }
     public BigDecimal getImporto() { return importo; }
     public String getTipo() { return tipo; }
     public LocalDateTime getData() { return data; }
 
-public void setId(Long id){
+public void setId(int id){
         this.id = id;
 }
-    public void setIdConto(Long idConto) {
-        if (idConto == null || idConto <= 0) throw new IllegalArgumentException("ID conto invalido");
+    public void setIdConto(int idConto) {
+        if ( idConto <= 0) throw new IllegalArgumentException("ID conto invalido");
         this.idConto = idConto;
     }
 

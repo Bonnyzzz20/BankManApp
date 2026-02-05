@@ -20,9 +20,9 @@ public class ContoService {
         return convertToDto(salvato);
     }
 
-    public ContoDto trovaPerId(Long id) {
+    public ContoDto trovaPerId(int id) {
 
-        if (id == null || id <= 0) {
+        if ( id <= 0) {
             throw new IllegalArgumentException("ID non valido: deve essere un valore numerico positivo.");
         }
 

@@ -7,7 +7,7 @@ import java.util.List;
 
 public record TransactionDto(
 
-        Long idConto,
+        int idConto,
         BigDecimal saldoAlMomento,
         List<Movimenti> movimenti,
         LocalDateTime dataReport

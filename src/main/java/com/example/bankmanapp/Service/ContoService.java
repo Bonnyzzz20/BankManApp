@@ -21,18 +21,27 @@ public class ContoService {
     }
 
     public ContoDto trovaPerId(Long id) {
+
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID non valido: deve essere un valore numerico positivo.");
+        }
+
         Conto conto = contoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Conto non trovato con ID: " + id));
         return convertToDto(conto);
 
     }
 
+
+
+
+
     //  Trova tutti i conti di un singolo cliente
 
 
-    public List<ContoDto> trovaContiDiUtente(Long idUtente) {
+    public List<ContoDto>findAll() {
         return contoRepository.findAll().stream()
-                .filter(c -> c.getIdUtente().equals(idUtente)) // Filtra per ID Utente
+               // .filter(c -> c.getIdUtente().equals(idUtente)) // Filtra per ID Utente
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }

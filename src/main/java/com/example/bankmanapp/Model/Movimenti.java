@@ -37,12 +37,16 @@ public class Movimenti {
     }
 
     // Getter
+
+    public Long getId() {return id;}
     public Long getIdConto() { return idConto; }
     public BigDecimal getImporto() { return importo; }
     public String getTipo() { return tipo; }
     public LocalDateTime getData() { return data; }
 
-
+public void setId(Long id){
+        this.id = id;
+}
     public void setIdConto(Long idConto) {
         if (idConto == null || idConto <= 0) throw new IllegalArgumentException("ID conto invalido");
         this.idConto = idConto;

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ContoRepository extends JpaRepository<Conto, Long> {
 
-    List<Conto> findByIdUtente(Long idUtente);
+
 }

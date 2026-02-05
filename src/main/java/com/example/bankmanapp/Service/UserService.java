@@ -30,9 +30,8 @@ public class UserService {
 
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID non valido: deve essere un valore numerico positivo.");
+
         }
-
-
         // Utilizzo di Optional per una gestione sicura
         // in caso un dato potrebbe non esistere
         //Mentre findAll() restituisce sempre una lista (che al massimo è vuota),
@@ -45,6 +44,10 @@ public class UserService {
 
 
     }
+
+
+
+
 
      //.stream() trasforma la lista in un flusso ordinato di dati
      //.map(this::convertToDto) per ogni record viene applicata la trasformaione
@@ -64,7 +67,6 @@ public class UserService {
                 user.getId(),
                 user.getNome(),
                 user.getCognome(),
-
                 user.getEmail(),
                 user.getCodiceFiscale()
         );

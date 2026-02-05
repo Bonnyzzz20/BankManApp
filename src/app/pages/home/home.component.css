@@ -156,11 +156,13 @@
 .account-balance {
   font-weight: 700;
   font-size: 1.1rem;
-  color: #10b981; /* Green for positive */
+  color: #10b981;
+  /* Green for positive */
 }
 
 .account-balance.negative {
-  color: #ef4444; /* Red for negative */
+  color: #ef4444;
+  /* Red for negative */
 }
 
 /* Transactions */
@@ -230,4 +232,61 @@
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn-small {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-small:hover {
+  opacity: 0.9;
+}
+
+/* Add Account Form */
+.add-account-form {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--primary);
+  background: rgba(99, 102, 241, 0.1);
+  /* Slight tint */
+}
+
+.add-account-form h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.form-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.form-input,
+.form-select {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  color: white;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
 }

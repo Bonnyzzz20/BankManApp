@@ -5,45 +5,63 @@
   </header>
 
   <div class="transfers-layout">
-    
+
     <!-- Transfer Form -->
     <section class="transfer-panel glass-panel">
       <h2>Dettagli Bonifico</h2>
+
+      @if (errorMsg) {
+      <div class="alert alert-error"
+        style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 1rem; margin-bottom: 1rem; border-radius: 0.5rem; border: 1px solid rgba(239, 68, 68, 0.5);">
+        {{ errorMsg }}
+      </div>
+      }
+      @if (successMsg) {
+      <div class="alert alert-success"
+        style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 1rem; margin-bottom: 1rem; border-radius: 0.5rem; border: 1px solid rgba(16, 185, 129, 0.5);">
+        {{ successMsg }}
+      </div>
+      }
+
       <form (ngSubmit)="onsubmit()" #transferForm="ngForm">
-        
+
         <div class="form-group">
-          <label for="beneficiary">Intestatario</label>
-          <input type="text" id="beneficiary" name="beneficiary" 
-                 [(ngModel)]="transferData.beneficiary" 
-                 placeholder="Es. Mario Rossi" required>
+          <label for="fromAccount">Conto di Addebito</label>
+          <select id="fromAccount" name="fromAccount" [(ngModel)]="transferData.fromAccountId" required
+            class="form-input">
+            @for (acc of accounts$ | async; track acc.id) {
+            <option [value]="acc.id">{{ acc.name }} - {{ acc.balance | currency:'EUR' }}</option>
+            }
+          </select>
         </div>
 
         <div class="form-group">
-          <label for="iban">IBAN</label>
-          <input type="text" id="iban" name="iban" 
-                 [(ngModel)]="transferData.iban" 
-                 placeholder="IT00 X..." required>
+          <label for="beneficiary">Intestatario</label>
+          <input type="text" id="beneficiary" name="beneficiary" [(ngModel)]="transferData.beneficiary"
+            placeholder="Es. Mario Rossi" required>
+        </div>
+
+        <div class="form-group">
+          <label for="iban">IBAN Destinatario</label>
+          <input type="text" id="iban" name="iban" [(ngModel)]="transferData.iban" placeholder="IT00 X..." required>
         </div>
 
         <div class="form-row">
           <div class="form-group">
             <label for="amount">Importo (€)</label>
-            <input type="number" id="amount" name="amount" 
-                   [(ngModel)]="transferData.amount" 
-                   placeholder="0.00" min="0.01" required>
+            <input type="number" id="amount" name="amount" [(ngModel)]="transferData.amount" placeholder="0.00"
+              min="0.01" required>
           </div>
-          
+
           <div class="form-group">
             <label for="reason">Causale</label>
-            <input type="text" id="reason" name="reason" 
-                   [(ngModel)]="transferData.reason" 
-                   placeholder="Es. Regalo">
+            <input type="text" id="reason" name="reason" [(ngModel)]="transferData.reason" placeholder="Es. Regalo">
           </div>
         </div>
 
         <div class="form-actions">
-          <app-button label="Esegui Bonifico" variant="primary" type="submit" 
-                     [disabled]="!transferForm.form.valid"></app-button>
+          <app-button label="Esegui Bonifico" variant="primary" type="submit"
+            [disabled]="!transferForm.form.valid"></app-button>
         </div>
 
       </form>
@@ -52,24 +70,24 @@
     <!-- Recent History -->
     <section class="history-panel glass-panel">
       <h2>Ultimi Bonifici</h2>
-      
+
       <div class="history-list">
         @for (tx of recentTransfers; track tx.id) {
-          <div class="history-item">
-            <div class="history-icon">💸</div>
-            <div class="history-details">
-              <h4>{{ tx.beneficiary }}</h4>
-              <span class="date">{{ tx.date }}</span>
-            </div>
-            <div class="history-status" [class.pending]="tx.status === 'pending'">
-              {{ tx.status === 'pending' ? '⏳' : '✅' }}
-            </div>
-            <div class="history-amount">
-              -{{ tx.amount | currency:'EUR' }}
-            </div>
+        <div class="history-item">
+          <div class="history-icon">💸</div>
+          <div class="history-details">
+            <h4>{{ tx.beneficiary }}</h4>
+            <span class="date">{{ tx.date }}</span>
           </div>
+          <div class="history-status" [class.pending]="tx.status === 'pending'">
+            {{ tx.status === 'pending' ? '⏳' : '✅' }}
+          </div>
+          <div class="history-amount">
+            -{{ tx.amount | currency:'EUR' }}
+          </div>
+        </div>
         } @empty {
-          <p class="empty-msg">Nessun bonifico recente.</p>
+        <p class="empty-msg">Nessun bonifico recente.</p>
         }
       </div>
     </section>

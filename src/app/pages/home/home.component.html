@@ -1,5 +1,5 @@
 <div class="home-container">
-  
+
   <!-- Hero Section -->
   <header class="hero-section">
     <h1>Bentornato, <span class="highlight">{{ currentUser()?.name || 'Utente' }}</span></h1>
@@ -28,34 +28,62 @@
 
   <!-- Main Grid -->
   <div class="dashboard-grid">
-    
+
     <!-- Accounts Section -->
     <section class="accounts-section glass-panel">
       <div class="section-header">
         <h2>I tuoi Conti</h2>
-        <a routerLink="/accounts" class="view-all">Vedi tutti &rarr;</a>
+        <div class="header-actions">
+          <button class="btn-small" (click)="toggleAddAccount()">+ Aggiungi</button>
+          <a routerLink="/accounts" class="view-all">Vedi tutti &rarr;</a>
+        </div>
       </div>
 
+      <!-- Add Account Form -->
+      @if (showAddAccountForm) {
+      <div class="add-account-form glass-panel">
+        <h3>Nuovo Conto</h3>
+        <div class="form-group">
+          <input type="text" [(ngModel)]="newAccountName" placeholder="Nome Conto (es. Risparmio)" class="form-input">
+          <input type="text" [(ngModel)]="newAccountIban" placeholder="IBAN" class="form-input">
+          <select [(ngModel)]="newAccountType" class="form-select">
+            <option value="checking">Conto Corrente</option>
+            <option value="savings">Risparmio</option>
+            <option value="investment">Investimenti</option>
+          </select>
+          <div class="form-actions">
+            <button (click)="submitNewAccount()" class="btn-primary">Salva</button>
+            <button (click)="toggleAddAccount()" class="btn-secondary">Annulla</button>
+          </div>
+        </div>
+      </div>
+      }
+
       <div class="accounts-list">
+        @if (accounts$ | async; as accounts) {
         @for (account of accounts; track account.id) {
-          <div class="account-item">
-            <div class="account-icon" [class.savings]="account.type === 'savings'" [class.credit]="account.type === 'credit'">
-              @if (account.type === 'savings') { 🐷 } 
-              @else if (account.type === 'credit') { 💳 }
-              @else { 🏦 }
-            </div>
-            <div class="account-details">
-              <h3>{{ account.name }}</h3>
-              <p class="iban">{{ account.iban }}</p>
-            </div>
-            <div class="account-balance" [class.negative]="account.balance < 0">
-              {{ account.balance | currency:'EUR' }}
-            </div>
+        <div class="account-item">
+          <div class="account-icon" [class.savings]="account.type === 'savings'"
+            [class.credit]="account.type === 'credit'">
+            @if (account.type === 'savings') { 🐷 }
+            @else if (account.type === 'credit') { 💳 }
+            @else { 🏦 }
           </div>
+          <div class="account-details">
+            <h3>{{ account.name }}</h3>
+            <p class="iban">{{ account.iban }}</p>
+          </div>
+          <div class="account-balance" [class.negative]="account.balance < 0">
+            {{ account.balance | currency:'EUR' }}
+          </div>
+        </div>
         } @empty {
-          <div class="empty-state">
-            <p>Nessun conto attivo.</p>
-          </div>
+        <div class="empty-state">
+          <p>Nessun conto attivo.</p>
+        </div>
+        }
+        } @else {
+        <div class="loading-state">Caricamento conti...</div>
         }
       </div>
     </section>
@@ -64,23 +92,28 @@
     <section class="transactions-section glass-panel">
       <div class="section-header">
         <h2>Transazioni Recenti</h2>
-        <button class="view-all">Vedi Storico &rarr;</button>
+        <button class="view-all" [routerLink]="['/accounts']" [queryParams]="{section: 'history'}">Vedi Storico
+          &rarr;</button>
       </div>
 
       <div class="transactions-list">
+        @if (transactions$ | async; as transactions) {
         @for (tx of transactions; track tx.id) {
-          <div class="transaction-item">
-            <div class="tx-icon">
-              @if (tx.type === 'income') { ⬇️ } @else { ⬆️ }
-            </div>
-            <div class="tx-info">
-              <h4>{{ tx.description }}</h4>
-              <p class="date">{{ tx.date }}</p>
-            </div>
-            <div class="tx-amount" [class.income]="tx.type === 'income'" [class.expense]="tx.type === 'expense'">
-              {{ tx.type === 'income' ? '+' : '' }} {{ tx.amount | currency:'EUR' }}
-            </div>
+        <div class="transaction-item">
+          <div class="tx-icon">
+            @if (tx.type === 'income') { ⬇️ } @else { ⬆️ }
           </div>
+          <div class="tx-info">
+            <h4>{{ tx.description }}</h4>
+            <p class="date">{{ tx.date }}</p>
+          </div>
+          <div class="tx-amount" [class.income]="tx.type === 'income'" [class.expense]="tx.type === 'expense'">
+            {{ tx.type === 'income' ? '+' : '' }} {{ tx.amount | currency:'EUR' }}
+          </div>
+        </div>
+        }
+        } @else {
+        <div class="loading-state">Caricamento transazioni...</div>
         }
       </div>
     </section>

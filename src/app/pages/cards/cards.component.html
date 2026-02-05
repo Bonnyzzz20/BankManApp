@@ -5,66 +5,200 @@
   </header>
 
   <div class="cards-grid">
+    @if (cards$ | async; as cards) {
     @for (card of cards; track card.id) {
-      <div class="card-wrapper">
-        <!-- Visual Card -->
-        <div class="credit-card" [ngClass]="card.variant">
-          <div class="card-bg"></div>
-          <div class="card-glow"></div>
-          
-          <div class="card-content">
-            <div class="card-top">
-              <span class="chip"></span>
-              <span class="contactless">))))</span>
-            </div>
-            
-            <div class="card-number">
-              {{ card.number }}
-            </div>
-            
-            <div class="card-bottom">
-              <div class="card-holder">
-                <span class="label">Titolare</span>
-                <span class="value">{{ card.holder }}</span>
-              </div>
-              <div class="card-expiry">
-                <span class="label">Scadenza</span>
-                <span class="value">{{ card.expiry }}</span>
-              </div>
-              <div class="card-logo">
-                @if (card.type === 'visa') { 
-                  <span class="visa-logo">VISA</span>
-                } @else {
-                  <span class="mc-logo">MasterCard</span>
-                }
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="card-wrapper">
+      <!-- Flip Container -->
+      <div class="card-scene">
+        <div class="card-flip" [class.is-flipped]="flippedCardId === card.id">
 
-        <!-- Card Actions -->
-        <div class="card-actions glass-panel">
-          <div class="balance-info">
-            <span class="label">Saldo</span>
-            <span class="value" [class.negative]="card.balance < 0">
-              {{ card.balance | currency:'EUR' }}
-            </span>
+          <!-- FRONT -->
+          <div class="card-face front">
+            <div class="credit-card" [ngClass]="card.color || 'blue'" (click)="flipCard(card.id)">
+              <div class="card-bg"></div>
+              <div class="card-glow"></div>
+
+              <div class="card-content">
+                <div class="card-top">
+                  <span class="chip"></span>
+                  <span class="contactless">))))</span>
+                  @if (card.isLocked) { <span class="lock-overlay-icon">🔒</span> }
+                </div>
+
+                <div class="card-number">
+                  {{ card.isLocked ? '**** **** **** ****' : card.number }}
+                </div>
+
+                <div class="card-bottom">
+                  <div class="card-holder">
+                    <span class="label">Titolare</span>
+                    <span class="value">{{ card.holder }}</span>
+                  </div>
+                  <div class="card-expiry">
+                    <span class="label">Scadenza</span>
+                    <span class="value">{{ card.expiry }}</span>
+                  </div>
+                  <div class="card-logo">
+                    <span class="visa-logo">VISA</span>
+                  </div>
+                </div>
+              </div>
+
+              @if (card.isLocked) {
+              <div class="locked-overlay"></div>
+              }
+            </div>
           </div>
-          <div class="action-buttons">
-            <button class="btn-action" title="Blocca Carta">🔒</button>
-            <button class="btn-action" title="Impostazioni">⚙️</button>
-            <button class="btn-action" title="Lista Movimenti">📄</button>
+
+          <!-- BACK -->
+          <div class="card-face back">
+            <div class="credit-card" [ngClass]="card.color || 'blue'" (click)="flipCard(card.id)">
+              <div class="magnetic-strip"></div>
+              <div class="signature-strip">
+                <span>{{ card.holder }}</span>
+                <div class="cvc-container">
+                  <div class="cvc-box">
+                    {{ visibleCvv[card.id] ? (card.cvc || '000') : '***' }}
+                  </div>
+                  <button class="icon-btn eye-btn" (click)="toggleCvv(card.id, $event)">
+                    {{ visibleCvv[card.id] ? '👁️' : '🙈' }}
+                  </button>
+                </div>
+              </div>
+              <p class="back-text">
+                Questa carta è proprietà della HomeBank.
+                In caso di ritrovamento restituire alla filiale più vicina.
+              </p>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- Card Actions -->
+      <div class="card-actions glass-panel">
+        <div class="balance-info">
+          <span class="label">Saldo / Limit</span>
+          <span class="value">
+            {{ card.balance !== undefined ? (card.balance | currency:'EUR') : (card.limit | currency:'EUR') }}
+          </span>
+        </div>
+        <div class="action-buttons">
+          <button class="btn-action" title="Ricarica" (click)="openTopUp(card.id)">📱</button>
+          <button class="btn-action" [title]="card.isLocked ? 'Sblocca' : 'Blocca'" (click)="toggleLock(card)">
+            {{ card.isLocked ? '🔓' : '🔒' }}
+          </button>
+          <button class="btn-action" title="Personalizza" (click)="openSettings(card.id)">🎨</button>
+          <button class="btn-action delete-action" title="Elimina Carta" (click)="deleteCard(card)">🗑️</button>
+        </div>
+      </div>
+    </div>
     }
 
     <!-- Add New Card Placeholder -->
     <div class="card-wrapper add-new">
-      <div class="add-card-btn">
+      <div class="add-card-btn" (click)="openRequestCard()">
         <span class="plus">+</span>
         <span>Richiedi Nuova Carta</span>
       </div>
     </div>
+
+    } @else {
+    <div class="loading">Caricamento carte...</div>
+    }
+
+    <!-- TOP UP MODAL OVERLAY -->
+    @if (showTopUpModal) {
+    <div class="modal-overlay">
+      <div class="modal-content glass-panel">
+        <h2>Ricarica Carta</h2>
+        @if (!topUpSuccess) {
+        <div class="form-group">
+          <label>Seleziona Carta (ID)</label>
+          <input type="number" [(ngModel)]="selectedCardId" placeholder="ID Carta" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Importo</label>
+          <input type="number" [(ngModel)]="topUpAmount" placeholder="0.00" class="form-input">
+        </div>
+        <div class="modal-actions">
+          <button (click)="confirmTopUp()" class="btn-primary">Ricarica</button>
+          <button (click)="closeTopUp()" class="btn-secondary">Chiudi</button>
+        </div>
+        } @else {
+        <div class="success-message">
+          <p>✅ Ricarica effettuata con successo!</p>
+        </div>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- SETTINGS MODAL -->
+    @if (showSettingsModal) {
+    <div class="modal-overlay">
+      <div class="modal-content glass-panel">
+        <h2>Personalizza Carta</h2>
+        <div class="form-group">
+          <label>Scegli Colore</label>
+          <div class="color-picker-grid">
+            <div class="color-option blue" (click)="updateCardColor('blue')" title="Blu"></div>
+            <div class="color-option gold" (click)="updateCardColor('gold')" title="Oro"></div>
+            <div class="color-option black" (click)="updateCardColor('black')" title="Nero"></div>
+            <div class="color-option red" (click)="updateCardColor('red')" title="Rosso"></div>
+            <div class="color-option green" (click)="updateCardColor('green')" title="Verde"></div>
+            <div class="color-option yellow" (click)="updateCardColor('yellow')" title="Giallo"></div>
+            <div class="color-option white" (click)="updateCardColor('white')" title="Bianco"></div>
+            <div class="color-option purple" (click)="updateCardColor('purple')" title="Viola"></div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button (click)="showSettingsModal = false" class="btn-secondary">Chiudi</button>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- REQUEST CARD MODAL -->
+    @if (showRequestCardModal) {
+    <div class="modal-overlay">
+      <div class="modal-content glass-panel">
+        <h2>Richiedi Nuova Carta</h2>
+        <div class="form-group">
+          <label>Tipo Carta</label>
+          <select [(ngModel)]="newCardType" class="form-input">
+            <option value="debit">Debito</option>
+            <option value="prepaid">Prepagata</option>
+            <option value="credit">Credito</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Colore</label>
+          <div class="color-picker-grid">
+            <div class="color-option blue" [class.selected]="newCardColor === 'blue'" (click)="newCardColor = 'blue'"
+              title="Blu"></div>
+            <div class="color-option gold" [class.selected]="newCardColor === 'gold'" (click)="newCardColor = 'gold'"
+              title="Oro"></div>
+            <div class="color-option black" [class.selected]="newCardColor === 'black'" (click)="newCardColor = 'black'"
+              title="Nero"></div>
+            <div class="color-option red" [class.selected]="newCardColor === 'red'" (click)="newCardColor = 'red'"
+              title="Rosso"></div>
+            <div class="color-option green" [class.selected]="newCardColor === 'green'" (click)="newCardColor = 'green'"
+              title="Verde"></div>
+            <div class="color-option yellow" [class.selected]="newCardColor === 'yellow'"
+              (click)="newCardColor = 'yellow'" title="Giallo"></div>
+            <div class="color-option white" [class.selected]="newCardColor === 'white'" (click)="newCardColor = 'white'"
+              title="Bianco"></div>
+            <div class="color-option purple" [class.selected]="newCardColor === 'purple'"
+              (click)="newCardColor = 'purple'" title="Viola"></div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button (click)="confirmRequestCard()" class="btn-primary">Richiedi</button>
+          <button (click)="showRequestCardModal = false" class="btn-secondary">Annulla</button>
+        </div>
+      </div>
+    </div>
+    }
+
   </div>
 </div>

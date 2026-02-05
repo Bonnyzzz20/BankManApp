@@ -1,36 +1,82 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
+import { ApiService } from '../../shared/api.service';
+import { Account, Transaction } from '../../shared/models';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private authService = inject(AuthService);
+  private apiService = inject(ApiService);
+  private router = inject(Router);
+
   currentUser = this.authService.currentUser;
 
-  // Dati finti (mock) per simulare i conti dell'utente
-  // In un'app reale questi arriverebbero da un servizio/API
-  accounts = [
-    { id: 1, type: 'checking', name: 'Conto Corrente Premium', iban: 'IT89 A123 4567 8901', balance: 12543.50 },
-    { id: 2, type: 'credit', name: 'Carta di Credito Gold', iban: 'IT89 A987 6543 2109', balance: -450.00 },
-    { id: 3, type: 'savings', name: 'Conto Risparmio', iban: 'IT89 A246 8135 7902', balance: 50000.00 }
-  ];
+  accounts$: Observable<Account[]> | undefined;
+  transactions$: Observable<Transaction[]> | undefined;
 
-  transactions = [
-    { id: 1, description: 'Amazon IT', date: '2023-10-25', amount: -89.90, type: 'expense' },
-    { id: 2, description: 'Stipendio', date: '2023-10-27', amount: 2450.00, type: 'income' },
-    { id: 3, description: 'Netflix', date: '2023-10-28', amount: -12.99, type: 'expense' },
-    { id: 4, description: 'Ristorante Da Mario', date: '2023-10-29', amount: -65.00, type: 'expense' }
-  ];
+  // New Account Form State
+  showAddAccountForm = false;
+  newAccountName = '';
+  newAccountIban = '';
+  newAccountType: 'checking' | 'savings' | 'investment' = 'checking';
 
-  // Funzione semplice per gestire i click sui bottoni di azione rapida
+  ngOnInit() {
+    this.refreshData();
+  }
+
+  refreshData() {
+    this.accounts$ = this.apiService.getAccounts();
+    this.transactions$ = this.apiService.getTransactions();
+  }
+
   handleQuickAction(action: string) {
-    console.log(`Azione attivata: ${action}`);
-    // Qui andrebbe la logica per navigare o aprire un modale
+    switch (action) {
+      case 'transfer':
+        this.router.navigate(['/transfers']);
+        break;
+      case 'topup':
+        // Assuming we implement a specific route for this, or general cards
+        this.router.navigate(['/cards']);
+        break;
+      case 'bills':
+        this.router.navigate(['/accounts'], { queryParams: { section: 'bills' } });
+        break;
+      case 'cards':
+        this.router.navigate(['/cards']);
+        break;
+      default:
+        console.log(`Unknown action: ${action}`);
+    }
+  }
+
+  toggleAddAccount() {
+    this.showAddAccountForm = !this.showAddAccountForm;
+  }
+
+  submitNewAccount() {
+    if (this.newAccountName && this.newAccountIban) {
+      this.apiService.addAccount({
+        name: this.newAccountName,
+        iban: this.newAccountIban,
+        type: this.newAccountType as any,
+        balance: 0 // Start with 0
+      }).subscribe(() => {
+        this.showAddAccountForm = false;
+        this.newAccountName = '';
+        this.newAccountIban = '';
+        this.refreshData(); // Reload list
+      });
+    }
   }
 }
+

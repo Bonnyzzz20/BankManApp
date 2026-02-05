@@ -4,8 +4,21 @@
     <p>Gestisci e monitora i tuoi saldi e movimenti in tempo reale.</p>
   </header>
 
-  <div class="accounts-grid">
-    @for (account of accounts; track account.id) {
+  <div class="tabs">
+    <button class="tab-btn" [class.active]="activeSection === 'accounts'"
+      (click)="setSection('accounts')">Conti</button>
+    <button class="tab-btn" [class.active]="activeSection === 'history'" (click)="setSection('history')">Storico
+      Transazioni</button>
+    <button class="tab-btn" [class.active]="activeSection === 'bills'" (click)="setSection('bills')">Bollettini</button>
+  </div>
+
+  <div class="content-area">
+
+    <!-- ACCOUNTS VIEW -->
+    @if (activeSection === 'accounts') {
+    <div class="accounts-grid">
+      @if (accounts$ | async; as accounts) {
+      @for (account of accounts; track account.id) {
       <div class="account-card glass-panel">
         <div class="card-header">
           <div class="account-type-icon" [ngClass]="account.type">
@@ -17,6 +30,7 @@
             <h3>{{ account.name }}</h3>
             <span class="account-badge">{{ account.type | titlecase }}</span>
           </div>
+          <button class="btn-icon delete-btn" title="Elimina Conto" (click)="deleteAccount(account.id)">🗑️</button>
         </div>
 
         <div class="card-body">
@@ -24,21 +38,173 @@
             <span class="label">Saldo Disponibile</span>
             <span class="amount">{{ account.balance | currency:'EUR' }}</span>
           </div>
-          
+
           <div class="iban-group">
             <span class="label">IBAN</span>
             <code class="iban">{{ account.iban }}</code>
-            <button class="btn-copy" title="Copia IBAN">📋</button>
+            <button class="btn-copy" title="Copia IBAN" (click)="copyIban(account.iban)">📋</button>
           </div>
         </div>
 
         <div class="card-footer">
           <div class="stats">
-            <span>{{ account.movements }} movimenti questo mese</span>
+            <span>{{ account.movements }} movimenti</span>
           </div>
-          <button class="btn btn-outline">Dettagli</button>
+          <button class="btn btn-outline" (click)="openAccountDetails(account)">Dettagli</button>
         </div>
       </div>
+      }
+      
+      <!-- Add Account Tile -->
+      <div class="account-card glass-panel add-account-card" (click)="openAddAccount()">
+        <div class="add-content">
+          <span class="plus-icon">+</span>
+          <span>Apri Nuovo Conto</span>
+        </div>
+      </div>
+
+      } @else {
+      <div class="loading">Caricamento conti...</div>
+      }
+    </div>
     }
+
+    <!-- HISTORY VIEW -->
+    @if (activeSection === 'history') {
+    <div class="history-list glass-panel">
+      <div class="history-header">
+        <h2>
+          @if(selectedAccount) { Movimenti: {{ selectedAccount.name }} } 
+          @else { Tutti i Movimenti }
+        </h2>
+        
+        <div class="controls">
+            <input type="month" [ngModel]="selectedMonth" (change)="onMonthChange($event)" class="month-picker">
+            @if(selectedAccount) {
+                <button class="btn-secondary" (click)="setSection('accounts')">Indietro</button>
+            }
+        </div>
+      </div>
+
+      @if (transactions$ | async; as transactions) {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Descrizione</th>
+            <th>Importo</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (tx of transactions; track tx.id) {
+          <tr>
+            <td>{{ tx.date }}</td>
+            <td>{{ tx.description }}</td>
+            <td [class.income]="tx.type === 'income'" [class.expense]="tx.type === 'expense'">
+              {{ tx.type === 'income' ? '+' : '' }} {{ tx.amount | currency:'EUR' }}
+            </td>
+          </tr>
+          } @empty {
+            <tr><td colspan="3" style="text-align:center">Nessun movimento nel periodo selezionato.</td></tr>
+          }
+        </tbody>
+      </table>
+      } @else {
+      <div class="loading">Caricamento storico...</div>
+      }
+    </div>
+    }
+
+    <!-- BILLS VIEW -->
+    @if (activeSection === 'bills') {
+    <div class="bills-list glass-panel">
+      <h2>Bollettini da Pagare</h2>
+      @if (bills$ | async; as bills) {
+      <div class="bills-grid">
+        @for (bill of bills; track bill.id) {
+        <div class="bill-card">
+          <div class="bill-header">
+            <span class="biller">{{ bill.billerName }}</span>
+            <span class="status" [class.pending]="bill.status === 'pending'">{{ bill.status }}</span>
+          </div>
+          <div class="bill-body">
+            <p>{{ bill.description }}</p>
+            <p class="due-date">Scadenza: {{ bill.dueDate }}</p>
+            <p class="amount">{{ bill.amount | currency:'EUR' }}</p>
+          </div>
+          <div class="bill-actions">
+            @if(bill.status === 'pending') {
+                <button class="btn-primary" (click)="openPayBill(bill)">Paga Ora</button>
+            }
+          </div>
+        </div>
+        } @empty {
+        <p>Nessun bollettino in sospeso.</p>
+        }
+      </div>
+      } @else {
+      <div class="loading">Caricamento bollettini...</div>
+      }
+    </div>
+    }
+
+    <!-- MODALS -->
+    
+    <!-- Add Account Modal -->
+    @if (showAddAccountModal) {
+    <div class="modal-overlay">
+      <div class="modal-content glass-panel">
+        <h2>Apri Nuovo Conto</h2>
+        <div class="form-group">
+          <label>Nome Conto</label>
+          <input [(ngModel)]="newAccountName" placeholder="Es. Conto Risparmio" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Tipo</label>
+          <select [(ngModel)]="newAccountType" class="form-input">
+            <option value="checking">Conto Corrente</option>
+            <option value="savings">Conto Risparmio</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>IBAN (Generato/Modificabile)</label>
+          <input [(ngModel)]="newAccountIban" class="form-input">
+        </div>
+        <div class="modal-actions">
+          <button (click)="createAccount()" class="btn-primary">Crea Conto</button>
+          <button (click)="showAddAccountModal = false" class="btn-secondary">Annulla</button>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Pay Bill Modal -->
+    @if (showPayBillModal && selectedBill) {
+    <div class="modal-overlay">
+      <div class="modal-content glass-panel">
+        <h2>Paga Bollettino</h2>
+        <p>Stai pagando <strong>{{ selectedBill.amount | currency:'EUR' }}</strong> a <strong>{{ selectedBill.billerName }}</strong></p>
+        
+        <div class="form-group">
+            <label>Seleziona Conto di Addebito</label>
+            <div class="account-select-list">
+                @if (accounts$ | async; as accounts) {
+                    @for (acc of accounts; track acc.id) {
+                        <div class="account-option" (click)="payBill(acc.id)">
+                            <span>{{ acc.name }}</span>
+                            <span>{{ acc.balance | currency:'EUR' }}</span>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        
+        <div class="modal-actions">
+          <button (click)="showPayBillModal = false" class="btn-secondary">Annulla</button>
+        </div>
+      </div>
+    </div>
+    }
+
   </div>
 </div>

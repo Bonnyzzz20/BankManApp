@@ -1,83 +1,73 @@
-import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
+import { PersistenceService } from '../shared/persistence.service';
 
 export interface User {
   name: string;
   email: string;
-  password?: string; // Campo password opzionale per l'interfaccia
+  password?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private platformId = inject(PLATFORM_ID);
-  
-  // Signal per gestire lo stato dell'utente corrente
-  currentUser = signal<User | null>(this.getUserFromStorage());
-  
-  // Computed signal per sapere se l'utente è loggato
+  private persistence = inject(PersistenceService);
+  private router = inject(Router);
+
+  // CURRENT SESSION: Stored in SessionStorage so it clears on browser close/restart
+  currentUser = signal<User | null>(this.persistence.loadSession<User>('hb_current_user'));
+
   isAuthenticated = computed(() => !!this.currentUser());
 
-  constructor(private router: Router) {}
+  constructor() { }
 
-  register(name: string, email: string, password?: string) {
-    const user: User = { name, email, password };
-    this.saveUser(user);
-    this.currentUser.set(user);
+  register(name: string, email: string, password?: string): boolean {
+    // 1. Load existing users "DB"
+    let users = this.persistence.load<User[]>('hb_users') || [];
+
+    // 2. Check duplicates
+    if (users.some(u => u.email === email)) {
+      alert('Utente già registrato con questa email.');
+      return false;
+    }
+
+    const newUser: User = { name, email, password };
+    users.push(newUser);
+
+    // 3. Save to "DB"
+    this.persistence.save('hb_users', users);
+
+    // 4. Auto-login (save to session)
+    this.persistence.saveSession('hb_current_user', newUser);
+    this.currentUser.set(newUser);
     this.router.navigate(['/']);
+    return true;
   }
 
-  login(email: string, password?: string) {
-    //serve per salvare in local storage
-    if (isPlatformBrowser(this.platformId)) {
-      const storedUser = localStorage.getItem('user_data');
-      if (storedUser) {
-          const user = JSON.parse(storedUser);
-          // Verifica email e password (se fornita)
-          if (user.email === email) {
-              if (password && user.password && user.password !== password) {
-                  return false; // Password errata
-              }
-              // Login successo (anche se password non c'era nei vecchi dati demo, permettiamo accesso per retro-compatibilità demo)
-              this.currentUser.set(user);
-              this.router.navigate(['/']);
-              return true;
-          }
-      }
-      
-      // I dati demo non funzionano più se richiediamo registrazione vera, 
-      // ma lasciamo il fallback se l'utente non esiste proprio per test rapidi (resetta demo user)
-      const user = { name: 'Utente Demo', email };
-      // Non salviamo questo utente demo automaticamente per forzare registrazione corretta
-      // ma per ora manteniamo comportamento simile
-      this.currentUser.set(user);
+  login(email: string, password?: string): boolean {
+    // 1. Load users "DB"
+    const users = this.persistence.load<User[]>('hb_users') || [];
+
+    // 2. Find user
+    const foundUser = users.find(u => u.email === email && u.password === password);
+
+    if (foundUser) {
+      // 3. Save to session
+      this.persistence.saveSession('hb_current_user', foundUser);
+      this.currentUser.set(foundUser);
       this.router.navigate(['/']);
       return true;
+    } else {
+      alert('Credenziali non valide.');
+      return false;
     }
-    return false;
   }
 
   logout() {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('user_data');
-    }
+    this.persistence.clearSession('hb_current_user');
     this.currentUser.set(null);
     this.router.navigate(['/login']);
   }
-
-  private saveUser(user: User) {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('user_data', JSON.stringify(user));
-    }
-  }
-
-  private getUserFromStorage(): User | null {
-    if (isPlatformBrowser(this.platformId)) {
-      const stored = localStorage.getItem('user_data');
-      return stored ? JSON.parse(stored) : null;
-    }
-    return null;
-  }
 }
+

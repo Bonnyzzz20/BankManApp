@@ -1,7 +1,96 @@
-.page-container {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+/* FLIP ANIMATION */
+.card-scene {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 380px;
 }
+
+.card-flip {
+  width: 100%;
+  aspect-ratio: 1.586;
+  position: relative;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card-flip.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  top: 0;
+  left: 0;
+}
+
+.card-face.front {
+  z-index: 2;
+}
+
+.card-face.back {
+  transform: rotateY(180deg);
+}
+
+/* Back Face Styles */
+.magnetic-strip {
+  background: #000;
+  width: 100%;
+  height: 50px;
+  margin-top: 30px;
+}
+
+.signature-strip {
+  width: 90%;
+  margin: 20px auto;
+  background: white;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  color: #333;
+  font-family: 'Brush Script MT', cursive;
+  font-size: 1.2rem;
+}
+
+.cvc-box {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-right: 5px;
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+.back-text {
+  font-size: 0.6rem;
+  padding: 0 20px;
+  text-align: center;
+  margin-top: 20px;
+  opacity: 0.7;
+}
+
+/* Lock Overlay */
+.locked-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  border-radius: 1.2rem;
+}
+
+.lock-overlay-icon {
+  font-size: 1.5rem;
+  margin-left: auto;
+}
+
 
 .page-header {
   text-align: center;
@@ -45,6 +134,7 @@
 }
 
 /* Variants */
+/* Variants */
 .credit-card.gold {
   background: linear-gradient(135deg, #FFD700, #DAA520, #B8860B);
 }
@@ -57,6 +147,38 @@
   background: linear-gradient(135deg, #0284c7, #0ea5e9, #38bdf8);
 }
 
+.credit-card.purple {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9, #5b21b6);
+}
+
+.credit-card.red {
+  background: linear-gradient(135deg, #ef4444, #dc2626, #b91c1c);
+}
+
+.credit-card.green {
+  background: linear-gradient(135deg, #22c55e, #16a34a, #15803d);
+}
+
+.credit-card.yellow {
+  background: linear-gradient(135deg, #facc15, #eab308, #ca8a04);
+  color: #1a1a1a;
+  /* darker text for yellow */
+}
+
+/* White card needs adjustments for text visibility */
+.credit-card.white {
+  background: linear-gradient(135deg, #f3f4f6, #ffffff, #e5e7eb);
+  color: #1a1a1a;
+}
+
+.credit-card.white .chip {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.credit-card.white .card-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.1), transparent 60%);
+}
+
 /* Glow effect */
 .card-glow {
   position: absolute;
@@ -64,7 +186,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2), transparent 60%);
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2), transparent 60%);
   pointer-events: none;
 }
 
@@ -89,7 +211,7 @@
   background: linear-gradient(135deg, #d4af37, #f2eab6);
   border-radius: 6px;
   position: relative;
-  border: 1px solid rgba(0,0,0,0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 /* Simulate chip lines */
@@ -100,8 +222,9 @@
   left: 0;
   width: 100%;
   height: 1px;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
 }
+
 .chip::after {
   content: '';
   position: absolute;
@@ -109,7 +232,7 @@
   top: 0;
   width: 1px;
   height: 100%;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .contactless {
@@ -124,7 +247,7 @@
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.4rem;
   letter-spacing: 2px;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   margin-top: 1rem;
 }
 
@@ -134,7 +257,8 @@
   align-items: flex-end;
 }
 
-.card-holder, .card-expiry {
+.card-holder,
+.card-expiry {
   display: flex;
   flex-direction: column;
 }
@@ -150,7 +274,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   text-transform: uppercase;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .card-logo {
@@ -179,7 +303,10 @@
   font-weight: 700;
   color: white;
 }
-.balance-info .value.negative { color: #ef4444; }
+
+.balance-info .value.negative {
+  color: #ef4444;
+}
 
 .action-buttons {
   display: flex;
@@ -187,7 +314,7 @@
 }
 
 .btn-action {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 50%;
   width: 36px;
@@ -201,7 +328,7 @@
 }
 
 .btn-action:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ADD NEW CARD */
@@ -212,7 +339,8 @@
 .add-card-btn {
   width: 100%;
   height: 100%;
-  min-height: 250px; /* aprox card height + actions */
+  min-height: 250px;
+  /* aprox card height + actions */
   border: 2px dashed rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-md);
   display: flex;
@@ -240,4 +368,139 @@
   .card-number {
     font-size: 1.1rem;
   }
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 400px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.modal-content h2 {
+  margin: 0;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.form-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-size: 1rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.modal-actions button {
+  flex: 1;
+}
+
+.success-message {
+  text-align: center;
+  color: #10b981;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 2rem 0;
+}
+
+/* Color Picker */
+.color-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 5px;
+}
+
+.color-option {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-option.selected {
+  border-color: white;
+  transform: scale(1.1);
+}
+
+/* Color Previews */
+.color-option.blue {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+}
+
+.color-option.gold {
+  background: linear-gradient(135deg, #FFD700, #DAA520);
+}
+
+.color-option.black {
+  background: linear-gradient(135deg, #1a1a1a, #000000);
+}
+
+.color-option.red {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.color-option.purple {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
+.color-option.green {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.color-option.yellow {
+  background: linear-gradient(135deg, #facc15, #eab308);
+}
+
+.color-option.white {
+  background: linear-gradient(135deg, #f3f4f6, #ffffff);
 }

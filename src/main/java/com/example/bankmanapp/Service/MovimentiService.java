@@ -44,16 +44,15 @@ public class MovimentiService {
 
 
 
-    private MovimentiDto convertToDto(Movimenti movimenti) {
+    // CORRETTO
+    private MovimentiDto convertToDto(Movimenti m) {
         return new MovimentiDto(
-
-                movimenti.getId(),
-                movimenti.getIdConto(),
-                movimenti.getImporto(),
-                movimenti.getTipo(),
-                movimenti.getData()
-
-
+                m.getId(),
+                m.getConto().getId(), // Devi chiamare getId() sull'oggetto Conto
+                (m.getCarta() != null) ? m.getCarta().getId() : 0, // Gestisci il null per la carta
+                m.getImporto(),
+                m.getTipo(),
+                m.getData()
         );
     }
 

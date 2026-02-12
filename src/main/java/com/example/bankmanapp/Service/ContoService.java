@@ -50,7 +50,7 @@ public class ContoService {
     private ContoDto convertToDto(Conto conto) {
         return new ContoDto(
                 conto.getId(),
-                conto.getIdUtente(),
+                conto.getIdUtente().getId(),
                 conto.getIban(),
                 conto.getSaldo()
         );

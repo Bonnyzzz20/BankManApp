@@ -15,14 +15,18 @@ public class Conto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //PK
 
-    @Column(name = "id_utente", nullable = false)
-    private int idUtente; // FK verso User
+    @ManyToOne(fetch = FetchType.LAZY)
+    // carica i dati dell'utente solo quando  richiedi getUtente().
+    @JoinColumn(name = "id_utente", nullable = false)
+    //@Column(name = "id_utente", nullable = false)
+    private User idUtente; // FK verso User
 
     @Column(name= "iban", nullable = false)
     private String iban;
 
     @Column(name = "saldo")
     private BigDecimal saldo;
+
 
     @Transient
     private List<Movimenti> listaMovimenti = new ArrayList<>();
@@ -32,7 +36,7 @@ public class Conto {
 
     public Conto() { this.saldo = BigDecimal.ZERO; }
 
-    public Conto(int id, int idUtente, String iban) {
+    public Conto(int id, User idUtente, String iban) {
         this.id = id;
         this.idUtente = idUtente;
         this.iban = iban;
@@ -40,13 +44,19 @@ public class Conto {
     }
 
 
-    public void aggiungiMovimento(Movimenti m) {
-        if (m == null) throw new IllegalArgumentException("Movimento nullo");
-        if ( this.id !=(m.getIdConto())) {
-            throw new IllegalArgumentException("Il movimento non appartiene a questo conto");
-        }
-        this.listaMovimenti.add(m);
-    }
+//    public void aggiungiMovimento(Movimenti m) {
+//        if (m == null) {
+//            throw new IllegalArgumentException("Movimento nullo");
+//        }
+//
+//        // Confrontiamo l'id di questo conto con l'id del conto associato al movimento
+//        // m.getConto() restituisce l'oggetto Conto, .getId() restituisce l'int
+//        if (this.id != m.getConto().getId()) {
+//            throw new IllegalArgumentException("Il movimento non appartiene a questo conto");
+//        }
+//
+//        this.listaMovimenti.add(m);
+//    }
 
 
     public int getId() { return id; }
@@ -65,8 +75,8 @@ public class Conto {
     public String getIban() { return iban; }
     public void setIban(String iban) { this.iban = iban; }
 
-    public int getIdUtente() { return idUtente; }
-    public void setIdUtente(int idUtente) { this.idUtente = idUtente; }
+    public User getIdUtente() { return idUtente; }
+    public void setIdUtente(User idUtente) { this.idUtente = idUtente; }
 }
 
 

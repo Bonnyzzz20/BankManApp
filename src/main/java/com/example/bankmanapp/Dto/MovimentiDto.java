@@ -7,7 +7,7 @@ public record MovimentiDto(
 
         int id,
         int idConto, // FK verso Conto
-        BigDecimal importo,
+        int i, BigDecimal importo,
         String tipo, // "DEPOSITO" o "PRELIEVO"
         LocalDateTime data
 

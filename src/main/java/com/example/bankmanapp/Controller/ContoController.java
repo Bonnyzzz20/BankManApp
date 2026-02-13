@@ -19,7 +19,6 @@ public class ContoController {
     ContoService contoService;
 
 
-
     @GetMapping(value = "/{id}")
     public ContoDto getConto(@PathVariable int id){
         ContoDto conto = contoService.trovaPerId(id);

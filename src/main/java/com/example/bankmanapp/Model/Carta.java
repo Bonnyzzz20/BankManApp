@@ -51,16 +51,39 @@ public class Carta {
 
     public Carta() {}
 
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+
     public String getNumeroCarta() { return numeroCarta; }
     public void setNumeroCarta(String numeroCarta) { this.numeroCarta = numeroCarta; }
+
     public TipoCarta getTipo() { return tipo; }
     public void setTipo(TipoCarta tipo) { this.tipo = tipo; }
+
     public Conto getConto() { return conto; }
     public void setConto(Conto conto) { this.conto = conto; }
+
     public boolean isAttiva() { return attiva; }
     public void setAttiva(boolean attiva) { this.attiva = attiva; }
+
+    public String getTitolare() { return titolare; }
+    public void setTitolare(String titolare) { this.titolare = titolare; }
+
+    public LocalDate getDataScadenza() { return dataScadenza; }
+    public void setDataScadenza(LocalDate dataScadenza) { this.dataScadenza = dataScadenza; }
+
+    public String getCvv() { return cvv; }
+    public void setCvv(String cvv) { this.cvv = cvv; }
+
+    public String getPin() { return pin; }
+    public void setPin(String pin) { this.pin = pin; }
+
+    public Double getFido() { return fido; }
+    public void setFido(Double fido) { this.fido = fido; }
+
+    public Double getMassimaleMensile() { return massimaleMensile; }
+    public void setMassimaleMensile(Double massimaleMensile) { this.massimaleMensile = massimaleMensile; }
+
+
     // ... altri getter e setter per titolare, scadenza, cvv, pin, fido, massimale ...
 }

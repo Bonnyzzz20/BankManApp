@@ -3,6 +3,7 @@ package com.example.bankmanapp.Service;
 import com.example.bankmanapp.Dto.ContoDto;
 import com.example.bankmanapp.Model.Conto;
 import com.example.bankmanapp.Repository.ContoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class ContoService {
     }
 
 
-    //  Trova tutti i conti di un singolo cliente
+
     public List<ContoDto>findAll() {
         return contoRepository.findAll().stream()
                // .filter(c -> c.getIdUtente().equals(idUtente)) // Filtra per ID Utente
@@ -42,7 +43,34 @@ public class ContoService {
     }
 
 
-    //  Trasforma il Model in DTO
+
+    @Transactional
+    public ContoDto aggiornaConto(int id, ContoDto dto) {
+
+        Conto esistente = contoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Impossibile aggiornare: ID non trovato"));
+
+
+        //  usiamo dto.saldo() e non getSaldo() perché è un Record
+        esistente.setSaldo(dto.saldo());
+        esistente.setIban(dto.iban());
+
+
+
+        Conto salvato = contoRepository.save(esistente);
+        return convertToDto(salvato);
+    }
+
+
+    public void eliminaConto(int id) {
+        if (!contoRepository.existsById(id)) {
+            throw new RuntimeException("Errore eliminazione: Conto con ID " + id + " non esiste.");
+        }
+        contoRepository.deleteById(id);
+    }
+
+
+
     private ContoDto convertToDto(Conto conto) {
         return new ContoDto(
                 conto.getId(),

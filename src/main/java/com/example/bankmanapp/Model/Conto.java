@@ -18,11 +18,14 @@ public class Conto {
     @ManyToOne(fetch = FetchType.LAZY)
     // carica i dati dell'utente solo quando  richiedi getUtente().
     @JoinColumn(name = "id_utente", nullable = false)
+
     //@Column(name = "id_utente", nullable = false)
     private User idUtente; // FK verso User
 
+
     @Column(name= "iban", nullable = false)
     private String iban;
+
 
     @Column(name = "saldo")
     private BigDecimal saldo;
@@ -30,8 +33,6 @@ public class Conto {
 
     @Transient
     private List<Movimenti> listaMovimenti = new ArrayList<>();
-
-
 
 
     public Conto() { this.saldo = BigDecimal.ZERO; }
@@ -42,21 +43,6 @@ public class Conto {
         this.iban = iban;
         this.saldo = BigDecimal.ZERO;
     }
-
-
-//    public void aggiungiMovimento(Movimenti m) {
-//        if (m == null) {
-//            throw new IllegalArgumentException("Movimento nullo");
-//        }
-//
-//        // Confrontiamo l'id di questo conto con l'id del conto associato al movimento
-//        // m.getConto() restituisce l'oggetto Conto, .getId() restituisce l'int
-//        if (this.id != m.getConto().getId()) {
-//            throw new IllegalArgumentException("Il movimento non appartiene a questo conto");
-//        }
-//
-//        this.listaMovimenti.add(m);
-//    }
 
 
     public int getId() { return id; }

@@ -2,9 +2,7 @@ package com.example.bankmanapp.Controller;
 
 
 import com.example.bankmanapp.Dto.MovimentiDto;
-import com.example.bankmanapp.Dto.UserDto;
 import com.example.bankmanapp.Service.MovimentiService;
-import jdk.dynalink.linker.LinkerServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +17,7 @@ public class MovimentiController {
 
     @Autowired
     MovimentiService movimentiService;
+
 
     @GetMapping(value = "/{id}")
     public MovimentiDto getMovimenti(@PathVariable int id) {

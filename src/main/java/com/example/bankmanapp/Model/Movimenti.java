@@ -33,6 +33,7 @@ public class Movimenti {
 
     public Movimenti() {}
 
+
     // Costruttore Robusto
     public Movimenti(Conto conto, Carta carta, BigDecimal importo, String tipo) {
         setConto(conto);
@@ -42,9 +43,11 @@ public class Movimenti {
         this.data = LocalDateTime.now();
     }
 
+
     // Getter e Setter con Validazione
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+
 
     public Conto getConto() { return conto; }
     public void setConto(Conto conto) {
@@ -52,8 +55,10 @@ public class Movimenti {
         this.conto = conto;
     }
 
+
     public Carta getCarta() { return carta; }
     public void setCarta(Carta carta) { this.carta = carta; }
+
 
     public BigDecimal getImporto() { return importo; }
     public void setImporto(BigDecimal importo) {
@@ -63,6 +68,7 @@ public class Movimenti {
         this.importo = importo;
     }
 
+
     public String getTipo() { return tipo; }
     public void setTipo(String tipo) {
         if (!"DEPOSITO".equals(tipo) && !"PRELIEVO".equals(tipo)) {
@@ -70,6 +76,7 @@ public class Movimenti {
         }
         this.tipo = tipo;
     }
+
 
     public LocalDateTime getData() { return data; }
 }

@@ -20,6 +20,7 @@ public class ContoService {
         return convertToDto(salvato);
     }
 
+
     public ContoDto trovaPerId(int id) {
 
         if ( id <= 0) {
@@ -29,22 +30,17 @@ public class ContoService {
         Conto conto = contoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Conto non trovato con ID: " + id));
         return convertToDto(conto);
-
     }
 
 
-
-
-
     //  Trova tutti i conti di un singolo cliente
-
-
     public List<ContoDto>findAll() {
         return contoRepository.findAll().stream()
                // .filter(c -> c.getIdUtente().equals(idUtente)) // Filtra per ID Utente
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
+
 
     //  Trasforma il Model in DTO
     private ContoDto convertToDto(Conto conto) {
@@ -54,8 +50,5 @@ public class ContoService {
                 conto.getIban(),
                 conto.getSaldo()
         );
-
-
     }
-
 }

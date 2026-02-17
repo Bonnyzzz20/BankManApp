@@ -10,7 +10,5 @@ public record MovimentiDto(
         int i, BigDecimal importo,
         String tipo, // "DEPOSITO" o "PRELIEVO"
         LocalDateTime data
-
-
 ) {
 }

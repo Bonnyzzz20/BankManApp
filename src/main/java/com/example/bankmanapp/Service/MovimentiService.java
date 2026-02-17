@@ -1,7 +1,6 @@
 package com.example.bankmanapp.Service;
 
 import com.example.bankmanapp.Dto.MovimentiDto;
-import com.example.bankmanapp.Dto.UserDto;
 import com.example.bankmanapp.Model.Movimenti;
 import com.example.bankmanapp.Repository.MovimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,9 @@ public class MovimentiService {
     private MovimentoRepository movimentoRepository;
 
 
-    public MovimentiDto salvaNuovoMovimento(Movimenti nuovoMovimento) {
-        Movimenti movimentoSalvato = movimentoRepository.save(nuovoMovimento);
+    public MovimentiDto salvaNuovoMovimento(Movimenti nuovoMovimenti) {
+        Movimenti movimentoSalvato = movimentoRepository.save(nuovoMovimenti);
         return convertToDto(movimentoSalvato);
-
     }
 
 
@@ -31,9 +29,7 @@ public class MovimentiService {
         return movimentoRepository.findById(id)
                 .map(this::convertToDto)
                 .orElseThrow(() -> new RuntimeException("Movimento non trovato con ID: " + id));
-
     }
-
 
 
     public List<MovimentiDto> findAll() {
@@ -43,8 +39,38 @@ public class MovimentiService {
     }
 
 
+    // INSERT
+    public MovimentiDto insert(Movimenti nuovoMovimenti) {
+        Movimenti movimentiSalvato = movimentoRepository.save(nuovoMovimenti);
+        return convertToDto(movimentiSalvato);
+    }
 
-    // CORRETTO
+
+    // UPDATE
+    public MovimentiDto update(int id, Movimenti movimentiAggiornato) {
+        Movimenti movimentiEsistente = movimentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Movimento non trovato con ID: " + id));
+
+        //Aggiorna solo i campi modificabili
+        movimentiEsistente.setConto(movimentiAggiornato.getConto());
+        movimentiEsistente.setCarta(movimentiAggiornato.getCarta());
+        movimentiEsistente.setImporto(movimentiAggiornato.getImporto());
+        movimentiEsistente.setTipo(movimentiAggiornato.getTipo());
+
+        Movimenti movimentiSalvato = movimentoRepository.save(movimentiEsistente);
+        return convertToDto(movimentiSalvato);
+    }
+
+
+    // DELETE
+    public void delete(int id) {
+        if (!movimentoRepository.existsById(id)) {
+            throw new RuntimeException("Movimento non trovato con ID: " + id);
+        }
+        movimentoRepository.deleteById(id);
+    }
+
+
     private MovimentiDto convertToDto(Movimenti m) {
         return new MovimentiDto(
                 m.getId(),
@@ -55,6 +81,4 @@ public class MovimentiService {
                 m.getData()
         );
     }
-
-
 }

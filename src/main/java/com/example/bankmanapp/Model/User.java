@@ -28,9 +28,6 @@ public class User {
     private String password;
 
 
-
-
-
     public User() {}
 
     public User(int id, String nome,String cognome, String email, String password, String codiceFiscale) {
@@ -53,7 +50,6 @@ public class User {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -61,7 +57,6 @@ public class User {
     public String getNome() {
         return nome;
     }
-
     public void setNome(String nome) {
         if (nome == null || nome.trim().isEmpty()) throw new IllegalArgumentException("Nome non valido");
         this.nome = nome;
@@ -69,20 +64,16 @@ public class User {
 
     public String getCognome(){
         return cognome;
-
     }
-
     public void setCognome(String cognome){
         if (cognome == null || cognome.trim().isEmpty()) throw new IllegalArgumentException("Cognome non valido");
         this.cognome = cognome;
-
     }
 
 
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         if (!email.contains("@")) throw new IllegalArgumentException("Email non valida");
         this.email = email;
@@ -92,7 +83,6 @@ public class User {
     public String getCodiceFiscale() {
         return codiceFiscale;
     }
-
     public void setCodiceFiscale(String codiceFiscale){
         if (codiceFiscale.length() != 16 || !codiceFiscale.matches("[A-Za-z0-9]+")) {
             System.out.println("Codice fiscale non valido");

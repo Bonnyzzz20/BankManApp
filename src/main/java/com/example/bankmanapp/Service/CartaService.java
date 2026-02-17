@@ -1,12 +1,10 @@
 package com.example.bankmanapp.Service;
 
-import com.example.bankmanapp.Model.Carta;
 import com.example.bankmanapp.Dto.CartaDto;
-import com.example.bankmanapp.Model.TipoCarta;
+import com.example.bankmanapp.Model.Carta;
 import com.example.bankmanapp.Repository.CartaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,61 +15,59 @@ public class CartaService {
     @Autowired
     private CartaRepository cartaRepository;
 
+    public CartaDto creaCarta(Carta nuovoCarta) {
+        Carta salvato = cartaRepository.save(nuovoCarta);
+        return toDto(salvato);
+    }
 
     public List<CartaDto> findAll() {
-        return cartaRepository.findAll().stream()
-                .map(this::convertToDto)
+        return cartaRepository.findAll()
+                .stream()
+                .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
     public CartaDto findById(int id) {
-        return cartaRepository.findById(id)
-                .map(this::convertToDto)
+        Carta carta = cartaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Carta non trovata con ID: " + id));
+        return toDto(carta);
     }
 
-    @Transactional
-    public CartaDto create(Carta carta) {
-        // qua nel caso va logica
-        Carta salvata = cartaRepository.save(carta);
-        return convertToDto(salvata);
-    }
+    public CartaDto update(int id, CartaDto cartaDto) {
+        Carta carta = cartaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Carta non trovata con ID: " + id));
 
-    @Transactional
-    public CartaDto update(int id, Carta dettagli) {
-        Carta esistente = cartaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Impossibile aggiornare una carta inesistente"));
+        carta.setNumeroCarta(cartaDto.numeroCarta());
+        carta.setTitolare(cartaDto.titolare());
+        carta.setDataScadenza(cartaDto.dataScadenza());
+        carta.setCvv(cartaDto.cvv());
+        carta.setPin(cartaDto.pin());
+        carta.setTipo(cartaDto.tipo());
+        carta.setFido(cartaDto.fido());
+        carta.setMassimaleMensile(cartaDto.massimaleMensile());
+        carta.setAttiva(cartaDto.attiva());
 
-
-        esistente.setTitolare(dettagli.getTitolare());
-        esistente.setMassimaleMensile(dettagli.getMassimaleMensile());
-        esistente.setAttiva(dettagli.isAttiva());
-        esistente.setFido(dettagli.getFido());
-
-
-        return convertToDto(cartaRepository.save(esistente));
+        return toDto(cartaRepository.save(carta));
     }
 
     public void delete(int id) {
         if (!cartaRepository.existsById(id)) {
-            throw new RuntimeException("ID carta non valido per l'eliminazione");
+            throw new RuntimeException("Impossibile eliminare: carta inesistente.");
         }
         cartaRepository.deleteById(id);
     }
 
-
-
-
-
-    public CartaDto convertToDto(Carta carta) {
-
+    private CartaDto toDto(Carta carta) {
         return new CartaDto(
                 carta.getId(),
-                carta.getNumeroCarta(),
+                //numero carta che non vogliamo mostrare
+                null,
                 carta.getTitolare(),
                 carta.getDataScadenza(),
-                carta.getCvv(),
-                carta.getPin(),
+                //cvv che non vogliamo mostrare
+                null,
+                //pin che non vogliamo mostrare
+                null,
                 carta.getTipo(),
                 carta.getFido(),
                 carta.getMassimaleMensile(),

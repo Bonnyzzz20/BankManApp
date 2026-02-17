@@ -21,7 +21,7 @@ public class MovimentiController {
 
     @GetMapping(value = "/{id}")
     public MovimentiDto getMovimenti(@PathVariable int id) {
-        MovimentiDto movimenti = movimentiService.trovaPerId(id);
+        MovimentiDto movimenti = movimentiService.findById(id);
         return movimenti;
     }
 

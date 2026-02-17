@@ -16,13 +16,13 @@ public class MovimentiService {
     private MovimentoRepository movimentoRepository;
 
 
-    public MovimentiDto salvaNuovoMovimento(Movimenti nuovoMovimenti) {
+    public MovimentiDto creaMovimento(Movimenti nuovoMovimenti) {
         Movimenti movimentoSalvato = movimentoRepository.save(nuovoMovimenti);
         return convertToDto(movimentoSalvato);
     }
 
 
-    public MovimentiDto trovaPerId(int id) {
+    public MovimentiDto findById(int id) {
         if ( id <= 0) {
             throw new IllegalArgumentException("ID non valido: deve essere un valore numerico positivo.");
         }

@@ -2,6 +2,8 @@ package com.example.bankmanapp.Model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,30 @@ public class User {
     @Column(name= "cognome", nullable = false)
     private String cognome;
 
+    @Column(name = "data_nascita", nullable = false )
+    private LocalDate dataDiNascita;
+
+    @Column(name = "cellulare", nullable = false, unique = true)
+    private int cellulare;
+
+    @Column(name = "citta", nullable = false)
+    private String citta;
+
+    @Column(name = "regione", nullable = false)
+    private String regione;
+
+    @Column(name = "provincia", nullable = false)
+    private String provincia;
+
+    @Column(name = "nazione", nullable = false )
+    private String nazione;
+
+    @Column(name = "cap" , nullable = false)
+    private int cap;
+
+    @Column(name = "indirizzo", nullable = false)
+    private String indirizzo;
+
     @Column (name = "codice_fiscale", nullable = false, unique = true)
     private String codiceFiscale;
 
@@ -30,13 +56,24 @@ public class User {
 
     public User() {}
 
-    public User(int id, String nome,String cognome, String email, String password, String codiceFiscale) {
+    public User(int id, String nome,String cognome, LocalDate dataDiNascita,int cellulare, String citta, String regione, String provincia, String nazione, int cap, String indirizzo,
+            String email, String password, String codiceFiscale) {
+
         this.id = id;
         this.nome = nome;
         this.cognome=cognome;
+        this.dataDiNascita=dataDiNascita;
+        this.cellulare=cellulare;
+        this.citta=citta;
+        this.regione=regione;
+        this.provincia=provincia;
+        this.nazione = nazione;
+        this.cap = cap;
+        this.indirizzo=indirizzo;
         this.email = email;
         this.password = password;
         this.codiceFiscale=codiceFiscale;
+
     }
 
 
@@ -69,6 +106,8 @@ public class User {
         if (cognome == null || cognome.trim().isEmpty()) throw new IllegalArgumentException("Cognome non valido");
         this.cognome = cognome;
     }
+
+
 
 
     public String getEmail() {

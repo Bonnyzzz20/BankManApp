@@ -34,7 +34,7 @@ public class Movimenti {
     public Movimenti() {}
 
 
-    // Costruttore Robusto
+    // Costruttore
     public Movimenti(Conto conto, Carta carta, BigDecimal importo, String tipo) {
         setConto(conto);
         this.carta = carta; // Può essere null

@@ -4,7 +4,7 @@ import com.example.bankmanapp.Model.TipoCarta;
 
 import java.time.LocalDate;
 
-public record CartaDto (
+public record CartaDto(
 
         int id,
         String numeroCarta,

@@ -29,7 +29,5 @@ public class MovimentiController {
     @GetMapping(value = "/Movimenti")
     public List <MovimentiDto> getAllMovimenti(){
         return movimentiService.findAll();
-
     }
-
 }

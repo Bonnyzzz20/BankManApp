@@ -8,7 +8,5 @@ public record ContoDto(
         int idUtente,
         String iban,
         BigDecimal saldo
-
-
 ) {
 }

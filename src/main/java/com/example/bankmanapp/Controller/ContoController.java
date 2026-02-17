@@ -24,10 +24,8 @@ public class ContoController {
         return conto;
     }
 
-@GetMapping (value = "/Conti")
-public List<ContoDto> getAllConti(){
+    @GetMapping (value = "/Conti")
+    public List<ContoDto> getAllConti(){
         return contoService.findAll();
-}
-
-
+    }
 }

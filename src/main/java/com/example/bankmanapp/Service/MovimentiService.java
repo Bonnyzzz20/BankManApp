@@ -39,14 +39,7 @@ public class MovimentiService {
     }
 
 
-    // INSERT
-    public MovimentiDto insert(Movimenti nuovoMovimenti) {
-        Movimenti movimentiSalvato = movimentoRepository.save(nuovoMovimenti);
-        return convertToDto(movimentiSalvato);
-    }
 
-
-    // UPDATE
     public MovimentiDto update(int id, Movimenti movimentiAggiornato) {
         Movimenti movimentiEsistente = movimentoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Movimento non trovato con ID: " + id));
@@ -62,7 +55,7 @@ public class MovimentiService {
     }
 
 
-    // DELETE
+
     public void delete(int id) {
         if (!movimentoRepository.existsById(id)) {
             throw new RuntimeException("Movimento non trovato con ID: " + id);
@@ -71,14 +64,14 @@ public class MovimentiService {
     }
 
 
-    private MovimentiDto convertToDto(Movimenti m) {
+    private MovimentiDto convertToDto(Movimenti movimenti) {
         return new MovimentiDto(
-                m.getId(),
-                m.getConto().getId(), // Devi chiamare getId() sull'oggetto Conto
-                (m.getCarta() != null) ? m.getCarta().getId() : 0, // Gestisci il null per la carta
-                m.getImporto(),
-                m.getTipo(),
-                m.getData()
+                movimenti.getId(),
+                movimenti.getConto().getId(), // Devi chiamare getId() sull'oggetto Conto
+                (movimenti.getCarta() != null) ? movimenti.getCarta().getId() : 0, // Gestisci il null per la carta
+                movimenti.getImporto(),
+                movimenti.getTipo(),
+                movimenti.getData()
         );
     }
 }

@@ -29,9 +29,7 @@ public class UserService {
 
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ID non valido: deve essere un valore numerico positivo.");
-
         }
-
 
         // Utilizzo di Optional per una gestione sicura
         // in caso un dato potrebbe non esistere
@@ -41,14 +39,12 @@ public class UserService {
         return userRepository.findById(id)
                 .map(this::convertToDto)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + id));
-
-
     }
 
 
-     //.stream() trasforma la lista in un flusso ordinato di dati
-     //.map(this::convertToDto) per ogni record viene applicata la trasformaione
-     //.collect(Collectors.toList()) prende tutti i record DTO r li inserisce in una lista finale
+    //.stream() trasforma la lista in un flusso ordinato di dati
+    //.map(this::convertToDto) per ogni record viene applicata la trasformaione
+    //.collect(Collectors.toList()) prende tutti i record DTO r li inserisce in una lista finale
     public List<UserDto> findAll() {
         return userRepository.findAll().stream()
                 .map(this::convertToDto)
@@ -56,14 +52,56 @@ public class UserService {
     }
 
 
-    // Conversione Model  DTO
+    public UserDto update(Long id, UserDto userDto) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + id));
+
+        user.setNome(userDto.nome());
+        user.setCognome(userDto.cognome());
+        user.setDataDiNascita(userDto.dataDiNascita());
+        user.setCellulare(userDto.cellulare());
+        user.setCitta(userDto.citta());
+        user.setRegione(userDto.regione());
+        user.setProvincia(userDto.provincia());
+        user.setNazione(userDto.nazione());
+        user.setCap(userDto.cap());
+        user.setIndirizzo(userDto.indirizzo());
+        user.setCodiceFiscale(userDto.codiceFiscale());
+        user.setEmail(userDto.email());
+        user.setPassword(userDto.password());
+
+        return convertToDto(userRepository.save(user));
+    }
+
+
+    public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("Impossibile eliminare: utente inesistente.");
+        }
+        userRepository.deleteById(id);
+    }
+
+
     private UserDto convertToDto(User user) {
         return new UserDto(
                 user.getId(),
                 user.getNome(),
                 user.getCognome(),
-                user.getEmail(),
-                user.getCodiceFiscale()
+                user.getDataDiNascita(),
+                user.getCellulare(),
+                user.getCitta(),
+                user.getRegione(),
+                user.getProvincia(),
+                user.getNazione(),
+                user.getCap(),
+                user.getIndirizzo(),
+                //non vogliamo mostrare il codice fiscale
+                null,
+                //non vogliamo mostrare l'email
+                null,
+                //non vogliamo mostrare la password
+                null
         );
     }
 }

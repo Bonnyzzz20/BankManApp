@@ -16,6 +16,5 @@ public record CartaDto(
         Double fido,
         Double massimaleMensile,
         boolean attiva
-
 ) {
 }

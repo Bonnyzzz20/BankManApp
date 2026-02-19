@@ -35,3 +35,4 @@ export class NavbarComponent {
     this.closeMenu();
   }
 }
+ 

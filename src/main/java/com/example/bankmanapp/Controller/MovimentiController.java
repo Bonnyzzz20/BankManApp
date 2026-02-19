@@ -36,7 +36,7 @@ public class MovimentiController {
     // Endpoint per l'inserimento di un nuovo movimento (Metodo insert del Service)
     @PostMapping
     public ResponseEntity<MovimentiDto> create(@RequestBody Movimenti nuovoMovimento) {
-        MovimentiDto creato = movimentiService.insert(nuovoMovimento);
+        MovimentiDto creato = movimentiService.creaMovimento(nuovoMovimento);
         return new ResponseEntity<>(creato, HttpStatus.CREATED);
     }
 
@@ -60,5 +60,5 @@ public class MovimentiController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
-    }//
+    }////
 }

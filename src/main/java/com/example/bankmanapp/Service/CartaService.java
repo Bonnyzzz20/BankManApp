@@ -77,4 +77,4 @@ public class CartaService {
                 carta.isAttiva()
         );
     }
-}
+}//

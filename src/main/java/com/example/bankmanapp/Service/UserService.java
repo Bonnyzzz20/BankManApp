@@ -75,15 +75,26 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    // Conversione Model DTO
+    // Conversione Model -> DTO (Completo con i 14 campi richiesti)
     private UserDto convertToDto(User user) {
         return new UserDto(
                 user.getId(),
                 user.getNome(),
                 user.getCognome(),
+                user.getDataDiNascita(),
+                user.getCellulare(),
+                user.getCitta(),
+                user.getRegione(),
+                user.getProvincia(),
+                user.getNazione(),
+                user.getCap(),
+                user.getIndirizzo(),
                 user.getEmail(),
+                null, // La password NON va mai inviata nel DTO (sicurezza)
                 user.getCodiceFiscale()
         );
     }
+
+
 }
 //
